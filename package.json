@@ -1,0 +1,23 @@
+{
+  "dependencies": {
+    "mongoose": "^6.1.4"
+  },
+  "name": "ug-biological-dictionary-server",
+  "description": "",
+  "version": "0.0.0",
+  "main": "main.js",
+  "devDependencies": {},
+  "scripts": {
+    "start": "node main.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Uniwersytet-Gdanski/biological-dictionary-server.git"
+  },
+  "author": "Rafał Majewski",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/Uniwersytet-Gdanski/biological-dictionary-server/issues"
+  },
+  "homepage": "https://github.com/Uniwersytet-Gdanski/biological-dictionary-server#readme"
+}
