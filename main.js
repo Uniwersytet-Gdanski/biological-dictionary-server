@@ -5,4 +5,5 @@ connectingMongoose.then(() => {
 	logStdout(`Connected to MongoDB.`);
 }).catch((err) => {
 	logStderr(err);
+	process.exit(1);
 });
