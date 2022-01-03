@@ -1,6 +1,15 @@
+const workful = require("workful");
+
 const {
 	GET,
-} = require("workful").symbols;
+} = workful.symbols;
+
+const {createGetFromQuery} = workful;
+
+const stringifyQuery = (query) => (
+	Object.entries(query).map(([key, value]) => (`${key}=${value}`)).join("&")
+);
+
 
 const fakeData = [
 	{
@@ -39,33 +48,33 @@ const fakeData = [
 
 const router = {
 	[GET]: (req, res) => {
-		const {
-			pageNumber: rawPageNumber,
-			pageSize: rawPageSize,
-			...queryRest
-		} = req.getQuery() || {};
-		const pageNumber = rawPageNumber === undefined ? 1 : Number(rawPageNumber || undefined);
-		if (isNaN(pageNumber) || !Number.isInteger(pageNumber) || pageNumber < 1) {
+		const query = req.getQuery();
+		const getFromQuery = createGetFromQuery(query);
+		const pageNumber = getFromQuery.integer("pageNumber", 1);
+		const pageSize = getFromQuery.integer("pageSize", 10);
+
+		if (isNaN(pageNumber) || pageNumber < 1) {
 			res.status(400).endText("Bad Request, no valid pageNumber provided");
 			return;
 		}
-		const pageSize = rawPageSize === undefined ? 10 : Number(rawPageSize || undefined);
-		if (isNaN(pageSize) || !Number.isInteger(pageSize) || pageSize > 50 || pageSize < 1) {
+		if (isNaN(pageSize) || pageSize > 50 || pageSize < 1) {
 			res.status(400).endText("Bad Request, no valid pageSize provided");
 			return;
 		}
 		const page = fakeData.slice((pageNumber - 1) * pageSize, pageNumber * pageSize);
-		const strigifiedQueryRest = Object.entries(queryRest).map(([key, value]) => (`${key}=${value}`)).join("&");
 		const fragment = req.getFragment();
 		const totalPages = Math.ceil(fakeData.length / pageSize);
 		// todo: https in urls
+		// todo: fragment doesnt work
+		console.log(pageNumber, pageSize, totalPages);
+		// todo, nie działa pageSize i pageNumber
 		res.endJson({
 			data: page,
 			pageNumber,
 			pageSize,
 			totalPages,
-			nextPageUrl: pageNumber < totalPages ? `http${""}://${req.getHeader("host")}/api/entries?pageNumber=${pageNumber + 1}&pageSize=${pageSize}${strigifiedQueryRest ? `&${strigifiedQueryRest}` : ""}${fragment == undefined ? "" : `#${fragment}`}` : null,
-			previousPageUrl: pageNumber > 1 ? `http${""}://${req.getHeader("host")}/api/entries?pageNumber=${pageNumber - 1}&pageSize=${pageSize}${strigifiedQueryRest ? `&${strigifiedQueryRest}` : ""}${fragment == undefined ? "" : `#${fragment}`}` : null,
+			nextPageUrl: pageNumber < totalPages ? `http${""}://${req.getHeader("host")}/api/entries?${stringifyQuery({...query, pageNumber: pageNumber + 1, pageSize})}${fragment == undefined ? "" : `#${fragment}`}` : null,
+			previousPageUrl: pageNumber > 1 ? `http${""}://${req.getHeader("host")}/api/entries?${stringifyQuery({...query, pageNumber: pageNumber - 1, pageSize})}${fragment == undefined ? "" : `#${fragment}`}` : null,
 		});
 	}
 };
