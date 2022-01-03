@@ -1,12 +1,12 @@
 {
   "dependencies": {
-    "mongoose": "^6.1.4"
+    "mongoose": "^6.1.4",
+    "workful": "^0.0.1"
   },
   "name": "ug-biological-dictionary-server",
   "description": "",
   "version": "0.0.0",
   "main": "main.js",
-  "devDependencies": {},
   "scripts": {
     "start": "node main.js"
   },
