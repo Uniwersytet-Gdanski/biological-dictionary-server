@@ -1,12 +1,12 @@
 const {Schema, model} = require("mongoose");
 const entrySchema = new Schema({
 	_id: String,
-	names: [String],
-	englishTerms: [{
-		singular: String,
-		plural: String,
-	}],
-	definition: String,
+	adminId: String,
+	token: {
+		type: String,
+		unique: true,
+	},
+	expireTimestamp: Number,
 });
 
 module.exports = model("Entry", entrySchema, "entries");
