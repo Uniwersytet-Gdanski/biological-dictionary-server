@@ -1,5 +1,5 @@
 const {Schema, model} = require("mongoose");
-const entrySchema = new Schema({
+const adminCredentialsSchema = new Schema({
 	_id: String,
 	login: {
 		type: String,
@@ -8,4 +8,4 @@ const entrySchema = new Schema({
 	hash: String,
 });
 
-module.exports = model("Entry", entrySchema, "entries");
+module.exports = model("AdminCredentials", adminCredentialsSchema, "adminCredentials");

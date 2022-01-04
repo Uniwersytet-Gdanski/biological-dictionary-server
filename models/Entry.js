@@ -3,6 +3,7 @@ const entrySchema = new Schema({
 	_id: String,
 	names: [String],
 	englishTerms: [{
+		_id: false,
 		singular: String,
 		plural: String,
 	}],

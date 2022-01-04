@@ -1,5 +1,5 @@
 const {Schema, model} = require("mongoose");
-const entrySchema = new Schema({
+const sessionSchema = new Schema({
 	_id: String,
 	adminId: String,
 	token: {
@@ -9,4 +9,4 @@ const entrySchema = new Schema({
 	expireTimestamp: Number,
 });
 
-module.exports = model("Entry", entrySchema, "entries");
+module.exports = model("Session", sessionSchema, "sessions");
