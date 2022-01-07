@@ -33,7 +33,7 @@ const router = {
 
 		const page = entries.slice((pageNumber - 1) * pageSize, pageNumber * pageSize);
 		const pagesCount = Math.ceil(entries.length / pageSize);
-		const baseUrl = `${config.protocol}://${config.host}:${config.port}/${req.getDividedPath().join("/")}`;
+		const baseUrl = `${config.baseUrl}/${req.getDividedPath().join("/")}`;
 		res.setStatusCode(200).endJson({
 			data: page,
 			pageNumber,

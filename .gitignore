@@ -1,3 +1,5 @@
 node_modules/
 /auth.json
 /config.json
+docker-compose.yml
+Dockerfile

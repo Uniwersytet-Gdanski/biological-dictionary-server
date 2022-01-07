@@ -1,5 +1,4 @@
 {
 	"port": 18292,
-	"protocol": "http",
-	"host": "localhost"
+	"baseUrl": "http://localhost:18292"
 }
