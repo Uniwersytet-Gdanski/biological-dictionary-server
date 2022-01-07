@@ -7,16 +7,16 @@ const {
 // const {createGetFromQuery} = workful;
 
 
-const entriesManager = require("../entriesManager.js");
+const entriesManager = require("../modules/entriesManager.js");
 
 const router = {
 	[GET]: (req, res) => {
 		const {query} = req.getQuery() || {};
 		if (query === undefined) {
-			res.status(400).endText("Bad Request, no query provided");
+			res.setStatusCode(400).endText("Bad Request, no query provided");
 			return;
 		}
-		res.endJson(entriesManager.search(query));
+		res.setStatusCode(200).endJson(entriesManager.search(query));
 	}
 };
 

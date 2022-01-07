@@ -15,4 +15,4 @@ const logStderr = (...args) => {
 module.exports = {
 	logStdout,
 	logStderr,
-}
+};

@@ -1,7 +1,7 @@
 {
   "dependencies": {
     "mongoose": "^6.1.4",
-    "workful": "^0.1.0"
+    "workful": "^1.1.2"
   },
   "name": "ug-biological-dictionary-server",
   "description": "",
@@ -19,5 +19,8 @@
   "bugs": {
     "url": "https://github.com/Uniwersytet-Gdanski/biological-dictionary-server/issues"
   },
-  "homepage": "https://github.com/Uniwersytet-Gdanski/biological-dictionary-server#readme"
+  "homepage": "https://github.com/Uniwersytet-Gdanski/biological-dictionary-server#readme",
+  "devDependencies": {
+    "eslint": "^8.6.0"
+  }
 }

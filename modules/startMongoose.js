@@ -13,5 +13,6 @@ mongoose.plugin((schema) => {
 
 const auth = require("../auth.json").mongodb;
 
+const startMongoose = () => (mongoose.connect(`mongodb://${auth.username}:${auth.password}@${auth.host}:${auth.port}/${auth.database}${"replicaSet" in auth ? `?replicaSet=${auth.replicaSet}` : ""}`));
 
-module.exports = mongoose.connect(`mongodb://${auth.username}:${auth.password}@${auth.host}:${auth.port}/${auth.database}${"replicaSet" in auth ? `?replicaSet=${auth.replicaSet}` : ""}`).then(()=>(mongoose));
+module.exports = startMongoose;

@@ -1,3 +1,5 @@
 {
-	"port": 18292
+	"port": 18292,
+	"protocol": "http",
+	"host": "localhost"
 }

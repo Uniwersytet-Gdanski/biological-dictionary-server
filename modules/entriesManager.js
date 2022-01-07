@@ -1,7 +1,23 @@
+const Entry = require("../models/Entry.js");
+
 const entriesManager = {
 	_data: new Map(),
 	add: function(entry) {
 		this._data.set(entry.id, entry);
+	},
+	fetchAll: async function() {
+		return Entry.find({}).then((entries) => {
+			for (const entry of entries) {
+				this.add(entry);
+			}
+			return entries;
+		});
+	},
+	fetchById: async function(id) {
+		return Entry.findById(id).then((entry) => {
+			if (entry) this.add(entry);
+			return entry;
+		});
 	},
 	getAll: function() {
 		return Array.from(this._data.values());
