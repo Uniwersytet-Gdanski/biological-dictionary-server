@@ -21,7 +21,7 @@ const fsReaddirSyncRecursive = (path) => {
 };
 
 const fsWriteFileSyncRecursive = (path, content) => {
-	const dividedPath = path.split("/");
+	const dividedPath = path.split("/").slice(0, -1);
 	let currentPath = "";
 	for (const relativePath of dividedPath) {
 		currentPath += relativePath + "/";
