@@ -1,14 +1,15 @@
 const fileByPath = new Map();
 
-const fs = require("fs");
+const fs = require("fs/promises");
+const fsSync = require("fs");
 const config = require("../config.json");
 const auth = require("../auth.json");
 
 const fsReaddirSyncRecursive = (path) => {
 	const files = [];
 	const _fsReaddirSyncRecursive = (basePath, relativePath, files) => {
-		for (const filename of fs.readdirSync(basePath + relativePath)) {
-			if (fs.statSync(basePath + relativePath + filename).isDirectory()) {
+		for (const filename of fsSync.readdirSync(basePath + relativePath)) {
+			if (fsSync.statSync(basePath + relativePath + filename).isDirectory()) {
 				_fsReaddirSyncRecursive(basePath, relativePath + filename + "/", files);
 			}
 			else {
@@ -25,11 +26,11 @@ const fsWriteFileSyncRecursive = (path, content) => {
 	let currentPath = "";
 	for (const relativePath of dividedPath) {
 		currentPath += relativePath + "/";
-		if (!fs.existsSync(currentPath)) {
-			fs.mkdirSync(currentPath);
+		if (!fsSync.existsSync(currentPath)) {
+			fsSync.mkdirSync(currentPath);
 		}
 	}
-	fs.writeFileSync(path, content);
+	fsSync.writeFileSync(path, content);
 };
 
 
@@ -109,12 +110,12 @@ const mimeTypeByExtension = {
 	"xml": "application/xml"
 };
 
-if (fs.existsSync("./build")) for (const filepath of fsReaddirSyncRecursive("./build")) {
+if (fsSync.existsSync("./build")) for (const filepath of fsReaddirSyncRecursive("./build")) {
 	const extension = filepath.match(/\.([^./]*)$/)[1];
 	const mimeType = mimeTypeByExtension[extension] ?? "application/octet-stream";
 	fileByPath.set(filepath, {
 		mimeType,
-		content: fs.readFileSync("./build/" + filepath),
+		content: fsSync.readFileSync("./build/" + filepath),
 	});
 }
 
@@ -152,7 +153,13 @@ const deployMiddlewareClear = (req, res) => {
 		return res.setStatusCode(401).end();
 	}
 	fileByPath.clear();
-	fs.rmSync("./build", {recursive: true});
+	fs.access("./build").then(() => {
+		fs.readdir("./build").then((filepaths) => {
+			for (const filepath of filepaths) {
+				fs.rm("./build/" + filepath, {recursive: true});
+			}
+		}).catch(() => {});
+	}).catch(() => {});
 	res.setStatusCode(200).end();
 };
 
