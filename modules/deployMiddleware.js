@@ -152,7 +152,7 @@ const deployMiddlewareClear = (req, res) => {
 		return res.setStatusCode(401).end();
 	}
 	fileByPath.clear();
-	fs.rmdirSync("./build", {recursive: true});
+	fs.rmSync("./build", {recursive: true});
 	res.setStatusCode(200).end();
 };
 
