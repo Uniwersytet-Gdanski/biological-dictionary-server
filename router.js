@@ -7,9 +7,6 @@ const {
 const deployMiddleware = require("./modules/deployMiddleware.js");
 
 const router = {
-	[GET]: (req, res) => {
-		res.endText("Hello, world!");
-	},
 	"api": require("./api/router.js"),
 	[MIDDLEWARE]: deployMiddleware.get,
 	"deploy": {
