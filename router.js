@@ -1,5 +1,4 @@
 const {
-	GET,
 	MIDDLEWARE,
 	POST,
 } = require("workful").symbols;
