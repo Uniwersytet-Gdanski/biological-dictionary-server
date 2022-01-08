@@ -142,7 +142,7 @@ const deployMiddlewarePost = async (req, res) => {
 
 const deployMiddlewareGet = (req, res) => {
 	const filePath = req.getDividedPath().join("/");
-	if (req.getDividedPath[0] === "api") return;
+	if (req.getDividedPath()[0] === "api") return;
 	const indexFile = fileByPath.get("index.html");
 	if (!indexFile) return;
 	if (req.method !== "GET") return res.setStatusCode(405).end();
