@@ -1,7 +1,7 @@
 {
   "dependencies": {
     "mongoose": "^6.1.4",
-    "workful": "^1.2.0"
+    "workful": "^1.2.1"
   },
   "name": "ug-biological-dictionary-server",
   "description": "",

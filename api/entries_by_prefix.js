@@ -14,7 +14,22 @@ const router = {
 	[GET]: paginate((req, res, {pageNumber, pageSize}) => {
 		if (isNaN(pageNumber)) return null;
 		if (isNaN(pageSize)) return null;
-		const entries = entriesManager.getAll();
+		const prefix = req.getQueryParam("prefix");
+		if (prefix == null) {
+			res.setStatusCode(400).end();
+			return null
+		}
+		const entries = entriesManager.getAll().reduce((entries, entry) => {
+			for (const name of entry.names) {
+				if (!name.startsWith(prefix)) continue;
+				entries.push({
+					id: entry.id,
+					name: name,
+				});
+			}
+			return entries;
+		}, []);
+
 		return {
 			pageNumber,
 			pageSize,
