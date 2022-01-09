@@ -8,10 +8,19 @@ class Node {
 	matches = [];
 }
 
+const calculatePermutations = (array) => {
+	if (array.length == 0) return [];
+	if (array.length == 1) return [array];
+	return array.flatMap((element, i) => (
+		calculatePermutations(array.slice(0, i).concat(array.slice(i + 1))).map((permutation) => [element].concat(permutation))
+	));
+};
+
+
 class LookupTree {
 	#rootNode = new Node();
 	#sanitizeWord(word) {
-		return latinize(word.trim().toLowerCase().replace(/\s+/g, " "));
+		return latinize(word.trim().toLowerCase().replace(/[^\w]+/g, " "));
 	}
 	#addToNode(node, query, match) {
 		node.matches.push(match);
@@ -28,10 +37,14 @@ class LookupTree {
 	addEntry(entry) {
 		for (const name of entry.names) {
 			const sanitizedName = this.#sanitizeWord(name);
-			this.#addToNode(this.#rootNode, sanitizedName, {
-				id: entry.id,
-				name,
-			});
+			for (const dividedSanitizedPermutedName of calculatePermutations(sanitizedName.split(" "))) {
+				const sanitizedPermutedName = dividedSanitizedPermutedName.join(" ");
+
+				this.#addToNode(this.#rootNode, sanitizedPermutedName, {
+					id: entry.id,
+					name,
+				});
+			}
 		}
 	}
 
