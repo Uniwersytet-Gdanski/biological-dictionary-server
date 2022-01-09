@@ -79,7 +79,8 @@ class LookupTree {
 	}
 	search(query) {
 		const matchByName = {};
-		this.#search(this.#rootNode, query, matchByName, 1);
+		const sanitizedQuery = this.#sanitizeWord(query);
+		this.#search(this.#rootNode, sanitizedQuery, matchByName, 1);
 		return Object.values(matchByName).sort((match1, match2) => match2.score - match1.score);
 	}
 }
