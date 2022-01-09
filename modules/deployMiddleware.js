@@ -147,8 +147,9 @@ const deployMiddlewareGet = (req, res) => {
 	if (!indexFile) return;
 	if (req.method !== "GET") return res.setStatusCode(405).end();
 	const file = fileByPath.get(filePath);
-	if (!file) return res.setStatusCode(404).setHeader("content-type", indexFile.mimeType).end(indexFile.content);
-	res.setStatusCode(200).setHeader("content-type", file.mimeType).end(file.content);
+	res.setStatusCode(200);
+	if (!file) return res.setHeader("content-type", indexFile.mimeType).end(indexFile.content);
+	res.setHeader("content-type", file.mimeType).end(file.content);
 };
 
 const deployMiddlewareClear = (req, res) => {
