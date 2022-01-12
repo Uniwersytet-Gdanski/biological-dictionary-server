@@ -28,7 +28,7 @@ const router = {
 				});
 			}
 			return entries;
-		}, []);
+		}, []).sort((entry1, entry2) => (entry1.name.localeCompare(entry2.name)));
 
 		return {
 			pageNumber,
