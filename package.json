@@ -2,7 +2,7 @@
   "dependencies": {
     "latinize": "^0.5.0",
     "mongoose": "^6.1.4",
-    "workful": "^2.0.2",
+    "workful": "^2.0.3",
     "yup": "^0.32.11"
   },
   "name": "ug-biological-dictionary-server",
