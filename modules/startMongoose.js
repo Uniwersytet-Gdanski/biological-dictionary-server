@@ -7,8 +7,13 @@ mongoose.plugin((schema) => {
 		transform: (doc, obj)=>{
 			obj.id = obj._id;
 			delete obj._id;
-		}
+		},
 	};
+	schema.virtual("id").set(function(value) {
+		this._id = value;
+	}).get(function() {
+		return this._id;
+	});
 });
 
 const auth = require("../auth.json").mongodb;

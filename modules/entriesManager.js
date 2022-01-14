@@ -43,6 +43,7 @@ class LookupTree {
 				this.#addToNode(this.#rootNode, sanitizedPermutedName, {
 					id: entry.id,
 					name,
+					entry,
 				});
 			}
 		}
@@ -96,14 +97,14 @@ class EntriesManager {
 	fetchAll = async function() {
 		return Entry.find({}).then((entries) => {
 			for (const entry of entries) {
-				this.add(entry);
+				this.add(entry.toJSON());
 			}
 			return entries;
 		});
 	};
 	fetchById = async function(id) {
 		return Entry.findById(id).then((entry) => {
-			if (entry) this.add(entry);
+			if (entry) this.add(entry.toJSON());
 			return entry;
 		});
 	};
@@ -113,8 +114,8 @@ class EntriesManager {
 	getById = function(id) {
 		return this.#entries.get(id);
 	};
-	search = function(query, maxResults = 10) {
-		return this.#lookupTree.search(query).slice(0, maxResults);
+	search = function(query) {
+		return this.#lookupTree.search(query);
 	};
 }
 

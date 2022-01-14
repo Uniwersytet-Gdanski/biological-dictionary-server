@@ -1,19 +1,20 @@
 const {
-	MIDDLEWARE,
 	POST,
-} = require("workful").symbols;
+} = require("workful").methodsSymbols;
 
 const deployMiddleware = require("./modules/deployMiddleware.js");
 
-const router = {
-	"api": require("./api/router.js"),
-	[MIDDLEWARE]: deployMiddleware.get,
-	"deploy": {
-		[MIDDLEWARE]: deployMiddleware.post,
+const router = [
+	deployMiddleware.get,
+	{
+		"api": require("./api/router.js"),
+		"deploy": {
+			[POST]: deployMiddleware.post,
+		},
+		"clear-deploy": {
+			[POST]: deployMiddleware.clear,
+		},
 	},
-	"clear-deploy": {
-		[POST]: deployMiddleware.clear,
-	},
-};
+];
 
 module.exports = router;
