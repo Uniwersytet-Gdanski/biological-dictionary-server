@@ -5,7 +5,7 @@ const {
 	GET,
 } = workful.methodsSymbols;
 
-const maxPageSize = 30;
+const {maxPageSize} = require("../../config.json");
 
 const yupValidationErrorHandler = require("../../modules/yupValidationErrorHandler.js");
 

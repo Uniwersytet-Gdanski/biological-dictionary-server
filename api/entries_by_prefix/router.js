@@ -5,7 +5,7 @@ const {
 	GET,
 } = workful.methodsSymbols;
 
-const maxPageSize = 200_000_000;
+const {maxPageSize} = require("../../config.json");
 
 const entriesManager = require("../../modules/entriesManager.js");
 

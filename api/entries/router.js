@@ -8,7 +8,7 @@ const {
 const entriesManager = require("../../modules/entriesManager.js");
 const yup = require("yup");
 
-const maxPageSize = 30;
+const {maxPageSize} = require("../../config.json");
 
 const queryParamsSchema = yup.object().shape({
 	pageNumber: yup.number().integer().min(1).default(1),
