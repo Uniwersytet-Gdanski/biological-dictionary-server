@@ -5,7 +5,7 @@ const {
 	GET,
 } = workful.methodsSymbols;
 
-const maxPageSize = 30;
+const maxPageSize = 200_000_000;
 
 const entriesManager = require("../../modules/entriesManager.js");
 
