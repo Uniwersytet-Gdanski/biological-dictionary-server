@@ -8,12 +8,10 @@ const deployMiddleware = require("./modules/deployMiddleware.js");
 
 const router = [
 	workful.middlewares.cors,
+	deployMiddleware.post,
 	deployMiddleware.get,
 	{
 		"api": require("./api/router.js"),
-		"deploy": {
-			[POST]: deployMiddleware.post,
-		},
 		"clear-deploy": {
 			[POST]: deployMiddleware.clear,
 		},

@@ -125,6 +125,9 @@ const deployMiddlewarePost = async (req, res) => {
 	if (req.method !== "POST") {
 		return;
 	}
+	if (req.getDividedPath()[0] !== "deploy") {
+		return;
+	}
 	if (req.getHeader("authorization") !== auth.deployToken) {
 		return res.setStatusCode(401).end();
 	}
