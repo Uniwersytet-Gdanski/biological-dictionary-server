@@ -1,4 +1,9 @@
 const workful = require("workful");
+const argon2 = require("argon2");
+const AdminCredentials = require("../../models/AdminCredentials.js");
+const Session = require("../../models/Session.js");
+const config = require("../../config.json");
+const crypto = require("crypto");
 const {
 	POST,
 } = workful.methodsSymbols;
@@ -10,14 +15,35 @@ const bodySchema = yup.object().shape({
 	password: yup.string().required(),
 });
 
+const yupValidationErrorHandler = require("../../modules/yupValidationErrorHandler.js");
+
 const router = {
-	// [POST]: [
-	// 	workful.middlewares.jsonBody,
-	// 	async (req, res) => {
-	// 		const castedBody = await bodySchema.validate(await req.getBody());
-	// 		res.setStatusCode(200).endText("abc");
-	// 	},
-	// ],
+	[POST]: [
+		workful.middlewares.jsonBody,
+		yupValidationErrorHandler,
+		async (req, res, data) => {
+			const {
+				login,
+				password,
+			} = await bodySchema.validate(data.jsonBody);
+			const adminCredentials = await AdminCredentials.findOne({login});
+			if (!adminCredentials) {
+				res.setStatusCode(401).end("Invalid username");
+				return;
+			}
+			const isValid = await argon2.verify(adminCredentials.hash, password);
+			if (!isValid) {
+				res.setStatusCode(401).end("Invalid password");
+				return;
+			}
+			const session = await Session.create({
+				adminId: adminCredentials.id,
+				token: crypto.randomBytes(config.tokenLength).toString("hex"),
+				expireTimestamp: Date.now() / 1000 + config.tokenValidityDuration,
+			});
+			res.setStatusCode(200).setCookie("sessionToken", session.token).end();
+		},
+	],
 };
 
 module.exports = router;
