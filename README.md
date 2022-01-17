@@ -13,15 +13,15 @@ GET /api/entries
 ```
 
 #### Query parameters:
-- `pageNumber`: page number to be returned (integer, min: 1, default: 1)
-- `pageSize`: number of entries to be returned (integer, min: 1, max: 300, default: 10)
+-    `pageNumber`: page number to be returned (integer, min: 1, default: 1)
+-    `pageSize`: number of entries to be returned (integer, min: 1, max: 300, default: 10)
 
 #### Responses:
 - ##### 400 Bad request
     
 - ##### 200 OK
     
-Response example:
+#### Response example:
 ```json
 {
     "pageNumber": 1,
@@ -59,23 +59,78 @@ Response example:
 ### GET /api/entries/{id}
 Returns entry with given id.
 
-Endpoint: 
-    GET /api/entries/{id}
+#### Endpoint: 
+```
+GET /api/entries/{id}
+```
 
-Path parameters:
-    id: entry id (string, required)
+#### Path parameters:
+-    `id`: entry id (string, required)
 
-Responses:
-    400: Bad request
-    404 Not Found (entry not found)
-    200 OK
+#### Responses:
+- ##### 400: Bad request
+- ##### 404 Not Found (entry not found)
+- ##### 200 OK
 
-Response example:
-    {
-        "names": [
+#### Response example:
+```json
+{
+    "names": [
+        "aberracja chromatyczna"
+    ],
+    "englishTerms": [
+        {
+            "singular": "chromatic aberration",
+            "plural": "chromatic aberrations"
+        },
+        {
+            "singular": "chromatic distortion",
+            "plural": "chromatic distortions"
+        },
+        {
+            "singular": "spherochromaticism",
+            "plural": "spherochromaticisms"
+        }
+    ],
+    "definition": "An optical aberration occuring when a lens does not focus all colours in one place, caused by light dispersion.",
+    "id": "aberracja-chromatyczna"
+}
+```
+
+### GET /api/entries-by-prefix
+Returns fragment of entries with given prefix based on pagination parameters and informations about pages.
+
+#### Endpoint: 
+```
+GET /api/entries-by-prefix
+```
+
+#### Query parameters:
+-    `prefix`: prefix to be searched (string, required)
+-    `pageNumber`: page number to be returned (integer, min: 1, default: 1)
+-    `pageSize`: number of entries to be returned (integer, min: 1, max: 300, default: 10)
+-    `withoutFullEntries`: decides if full entries should be returned (boolean, nullable, default: false)
+
+#### Responses:
+- ##### 400: Bad request
+- ##### 200 OK
+
+#### Response example:
+```json
+{
+    "pageNumber": 1,
+    "pageSize": 1,
+    "maxPageSize": 300,
+    "pagesCount": 7,
+    "data": [
+        {
+        "id": "aberracja-chromatyczna",
+        "name": "aberracja chromatyczna",
+        "entry": {
+            "names": [
             "aberracja chromatyczna"
-        ],
-        "englishTerms": [
+            ],
+            "englishTerms": [
             {
                 "singular": "chromatic aberration",
                 "plural": "chromatic aberrations"
@@ -88,130 +143,89 @@ Response example:
                 "singular": "spherochromaticism",
                 "plural": "spherochromaticisms"
             }
-        ],
-        "definition": "An optical aberration occuring when a lens does not focus all colours in one place, caused by light dispersion.",
-        "id": "aberracja-chromatyczna"
-    }
-
-### GET /api/entries-by-prefix
-Returns fragment of entries with given prefix based on pagination parameters and informations about pages.
-
-Endpoint: 
-    GET /api/entries-by-prefix
-
-Query parameters:
-    prefix: prefix to be searched (string, required)
-    pageNumber: page number to be returned (integer, min: 1, default: 1)
-    pageSize: number of entries to be returned (integer, min: 1, max: 300, default: 10)
-    withoutFullEntries: decides if full entries should be returned (boolean, nullable, default: false)
-
-Responses:
-    400: Bad request
-    200 OK
-
-Response example:
-    {
-        "pageNumber": 1,
-        "pageSize": 1,
-        "maxPageSize": 300,
-        "pagesCount": 7,
-        "data": [
-            {
-            "id": "aberracja-chromatyczna",
-            "name": "aberracja chromatyczna",
-            "entry": {
-                "names": [
-                "aberracja chromatyczna"
-                ],
-                "englishTerms": [
-                {
-                    "singular": "chromatic aberration",
-                    "plural": "chromatic aberrations"
-                },
-                {
-                    "singular": "chromatic distortion",
-                    "plural": "chromatic distortions"
-                },
-                {
-                    "singular": "spherochromaticism",
-                    "plural": "spherochromaticisms"
-                }
-                ],
-                "definition": "An optical aberration occuring when a lens does not focus all colours in one place, caused by light dispersion.",
-                "id": "aberracja-chromatyczna"
-            }
-            }
-        ],
-        "nextPageUrl": "https://dict.gacko.pl/api/entries-by-prefix?prefix=ab&pageSize=1&pageNumber=2",
-        "previousPageUrl": null
-    }
+            ],
+            "definition": "An optical aberration occuring when a lens does not focus all colours in one place, caused by light dispersion.",
+            "id": "aberracja-chromatyczna"
+        }
+        }
+    ],
+    "nextPageUrl": "https://dict.gacko.pl/api/entries-by-prefix?prefix=ab&pageSize=1&pageNumber=2",
+    "previousPageUrl": null
+}
+```
 
 ### GET /api/search-entries
 Returns fragment of entries matching given query based on pagination parameters, informations about pages and score of each entry.
 
-Endpoint: 
-    GET /api/search-entries
+#### Endpoint: 
+```
+GET /api/search-entries
+```
 
-Query parameters:
-    query: query to be searched (string, required)
-    pageNumber: page number to be returned (integer, min: 1, default: 1)
-    pageSize: number of entries to be returned (integer, min: 1, max: 300, default: 10)
-    withoutFullEntries: decides if full entries should be returned (boolean, nullable, default: false)
+#### Query parameters:
+-    `query`: query to be searched (string, required)
+-    `pageNumber`: page number to be returned (integer, min: 1, default: 1)
+-    `pageSize`: number of entries to be returned (integer, min: 1, max: 300, default: 10)
+-    `withoutFullEntries`: decides if full entries should be returned (boolean, nullable, default: false)
 
-Resposes:
-    400: Bad request
-    200 OK
+#### Resposes:
+- ##### 400: Bad request
+- ##### 200 OK
 
-Response example:
-    {
-        "pageNumber": 1,
-        "pageSize": 1,
-        "maxPageSize": 300,
-        "pagesCount": 3446,
-        "data": [
+#### Response example:
+```json
+{
+    "pageNumber": 1,
+    "pageSize": 1,
+    "maxPageSize": 300,
+    "pagesCount": 3446,
+    "data": [
+        {
+        "id": "aberracja-chromatyczna",
+        "name": "aberracja chromatyczna",
+        "score": 0.8,
+        "entry": {
+            "names": [
+            "aberracja chromatyczna"
+            ],
+            "englishTerms": [
             {
-            "id": "aberracja-chromatyczna",
-            "name": "aberracja chromatyczna",
-            "score": 0.8,
-            "entry": {
-                "names": [
-                "aberracja chromatyczna"
-                ],
-                "englishTerms": [
-                {
-                    "singular": "chromatic aberration",
-                    "plural": "chromatic aberrations"
-                },
-                {
-                    "singular": "chromatic distortion",
-                    "plural": "chromatic distortions"
-                },
-                {
-                    "singular": "spherochromaticism",
-                    "plural": "spherochromaticisms"
-                }
-                ],
-                "definition": "An optical aberration occuring when a lens does not focus all colours in one place, caused by light dispersion.",
-                "id": "aberracja-chromatyczna"
+                "singular": "chromatic aberration",
+                "plural": "chromatic aberrations"
+            },
+            {
+                "singular": "chromatic distortion",
+                "plural": "chromatic distortions"
+            },
+            {
+                "singular": "spherochromaticism",
+                "plural": "spherochromaticisms"
             }
-            }
-        ],
-        "nextPageUrl": "https://dict.gacko.pl/api/search-entries?query=abc&pageSize=1&pageNumber=2",
-        "previousPageUrl": null
-    }
-    
+            ],
+            "definition": "An optical aberration occuring when a lens does not focus all colours in one place, caused by light dispersion.",
+            "id": "aberracja-chromatyczna"
+        }
+        }
+    ],
+    "nextPageUrl": "https://dict.gacko.pl/api/search-entries?query=abc&pageSize=1&pageNumber=2",
+    "previousPageUrl": null
+}
+```
+
 ### POST /api/login
 Creates session for user with given credentials.
 
-Endpoint: 
-    POST /api/login
+#### Endpoint: 
+```
+POST /api/login
+```
 
-Body parameters:
-    login: login (string, required)
-    password: password (string, required)
+#### Body parameters:
+-    `login`: login (string, required)
+-    `password`: password (string, required)
 
-Responses:
-    400: Bad request
-    401	Unauthorized (wrong login or password)
-    200 OK
+#### Responses:
+- ##### 400: Bad request
+- ##### 401	Unauthorized (wrong login or password)
+- ##### 200 OK
 
