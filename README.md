@@ -7,49 +7,54 @@ BASE URL: https://dict.gacko.pl/api
 ### GET /api/entries
 Returns fragment of all entries based on pagination parameters and informations about pages.
 
-Endpoint: 
-    GET /api/entries
+#### Endpoint: 
+```
+GET /api/entries
+```
 
-Query parameters:
-    pageNumber: page number to be returned (integer, min: 1, default: 1)
-    pageSize: number of entries to be returned (integer, min: 1, max: 300, default: 10)
+#### Query parameters:
+- `pageNumber`: page number to be returned (integer, min: 1, default: 1)
+- `pageSize`: number of entries to be returned (integer, min: 1, max: 300, default: 10)
 
-Responses:
-    400: Bad request
-    200 OK
+#### Responses:
+- ##### 400 Bad request
+    
+- ##### 200 OK
     
 Response example:
-    {
-        "pageNumber": 1,
-        "pageSize": 1,
-        "maxPageSize": 300,
-        "pagesCount": 2881,
-        "data": [
-            {
-                "names": [
-                    "aberracja chromatyczna"
-                ],
-                "englishTerms": [
-                    {
-                        "singular": "chromatic aberration",
-                        "plural": "chromatic aberrations"
-                    },
-                    {
-                        "singular": "chromatic distortion",
-                        "plural": "chromatic distortions"
-                    },
-                    {
-                        "singular": "spherochromaticism",
-                        "plural": "spherochromaticisms"
-                    }
-                ],
-                "definition": "An optical aberration occuring when a lens does not focus all colours in one place, caused by light dispersion.",
-                "id": "aberracja-chromatyczna"
-            }
-        ],
-        "nextPageUrl": "https://dict.gacko.pl/api/entries?pageSize=1&pageNumber=2",
-        "previousPageUrl": null
-    }
+```json
+{
+    "pageNumber": 1,
+    "pageSize": 1,
+    "maxPageSize": 300,
+    "pagesCount": 2881,
+    "data": [
+        {
+            "names": [
+                "aberracja chromatyczna"
+            ],
+            "englishTerms": [
+                {
+                    "singular": "chromatic aberration",
+                    "plural": "chromatic aberrations"
+                },
+                {
+                    "singular": "chromatic distortion",
+                    "plural": "chromatic distortions"
+                },
+                {
+                    "singular": "spherochromaticism",
+                    "plural": "spherochromaticisms"
+                }
+            ],
+            "definition": "An optical aberration occuring when a lens does not focus all colours in one place, caused by light dispersion.",
+            "id": "aberracja-chromatyczna"
+        }
+    ],
+    "nextPageUrl": "https://dict.gacko.pl/api/entries?pageSize=1&pageNumber=2",
+    "previousPageUrl": null
+}
+```
 
 ### GET /api/entries/{id}
 Returns entry with given id.
