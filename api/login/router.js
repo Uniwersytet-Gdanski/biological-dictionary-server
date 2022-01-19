@@ -41,7 +41,7 @@ const router = {
 				token: crypto.randomBytes(config.tokenLength).toString("hex"),
 				expireTimestamp: Date.now() / 1000 + config.tokenValidityDuration,
 			});
-			res.setStatusCode(200).setCookie("sessionToken", session.token).end();
+			res.setStatusCode(200).setCookie("sessionToken", session.token).setCookie("sessionId", session.id).end();
 		},
 	],
 };
