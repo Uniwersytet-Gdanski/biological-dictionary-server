@@ -7,7 +7,7 @@ BASE URL: https://dict.gacko.pl/api
 ### GET /api/entries
 Returns fragment of all entries based on pagination parameters and informations about pages.
 
-#### Endpoint: 
+#### Endpoint:
 ```
 GET /api/entries
 ```
