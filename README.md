@@ -111,6 +111,52 @@ DELETE /api/entries/{id}
 - ##### 404 Not Found (entry not found)
 - ##### 204 No Content
 
+### POST /api/entries
+Adds entry to database.
+
+#### Endpoint:
+```
+POST /api/entries
+```
+
+#### Body parameters:
+- `names`: polish translations of entry (array od strings, required, min length: 1) 
+- `definition`: definition of entry (string, required)
+- `englishTerms`: english translations of entry in singular and plural versions (required, min length: 1, array of objects containing:
+    - `singular`: singular translation of entry (string, required)
+    - `plural`: plural translation of entry (string, required)
+
+#### Responses:
+- ##### 400 Bad Request
+
+- ##### 409 Conflict (entry already exists)
+    
+- ##### 200 OK
+    
+#### Response example:
+```json
+{
+    "names": [
+        "aberracja chromatyczna"
+    ],
+    "englishTerms": [
+        {
+            "singular": "chromatic aberration",
+            "plural": "chromatic aberrations"
+        },
+        {
+            "singular": "chromatic distortion",
+            "plural": "chromatic distortions"
+        },
+        {
+            "singular": "spherochromaticism",
+            "plural": "spherochromaticisms"
+        }
+    ],
+    "definition": "An optical aberration occuring when a lens does not focus all colours in one place, caused by light dispersion.",
+    "id": "aberracja-chromatyczna"
+}
+```
 
 ### GET /api/entries-by-prefix
 Returns fragment of entries with given prefix based on pagination parameters and informations about pages.
