@@ -4,10 +4,22 @@ const paginate = require("../../modules/paginate.js");
 const {
 	GET,
 	DELETE,
+	POST,
 } = workful.methodsSymbols;
 
-const entriesManager = require("../../modules/entriesManager.js");
 const yup = require("yup");
+
+const postBodySchema = yup.object().shape({
+	names: yup.array().of(yup.string().required()).required().min(1),
+	definition: yup.string().required(),
+	englishTerms: yup.array().of(yup.object().shape({
+		singular: yup.string().required(),
+		plural: yup.string().required(),
+	})).required(),
+});
+
+const entriesManager = require("../../modules/entriesManager.js");
+
 const sessionMiddleware = require("../../modules/sessionMiddleware.js");
 
 const {maxPageSize} = require("../../config.json");
@@ -36,6 +48,20 @@ const router = {
 				data: entries.slice((pageNumber - 1) * pageSize, pageNumber * pageSize),
 			};
 		})
+	],
+	[POST]: [
+		sessionMiddleware,
+		workful.middlewares.jsonBody,
+		yupValidationErrorHandler,
+		async (req, res, data) => {
+			const jsonBody = await postBodySchema.validate(data.jsonBody);
+			await entriesManager.add(jsonBody).then((entry) => {
+				res.setStatusCode(200).endJson(entry);
+			}).catch((error) => {
+				if (error.code === 11000) return res.setStatusCode(409).end(`Entry with id "${jsonBody.names[0].toLowerCase().replace(/ /g, "-")}" already exists`);
+				throw error;
+			});
+		},
 	],
 	":": [
 		"entryId",

@@ -90,21 +90,21 @@ class LookupTree {
 class EntriesManager {
 	#entries = new Map();
 	#lookupTree = new LookupTree();
-	add = function(entry) {
+	addToTree = function(entry) {
 		this.#entries.set(entry.id, entry);
 		this.#lookupTree.addEntry(entry);
 	};
 	fetchAll = async function() {
 		return Entry.find({}).then((entries) => {
 			for (const entry of entries) {
-				this.add(entry.toJSON());
+				this.addToTree(entry.toJSON());
 			}
 			return entries;
 		});
 	};
 	fetchById = async function(id) {
 		return Entry.findById(id).then((entry) => {
-			if (entry) this.add(entry.toJSON());
+			if (entry) this.addToTree(entry.toJSON());
 			return entry;
 		});
 	};
@@ -121,6 +121,11 @@ class EntriesManager {
 	};
 	search = function(query) {
 		return this.#lookupTree.search(query);
+	};
+	add = async function(entry) {
+		return Entry.create(entry).then((entry) => {
+			return entry;
+		});
 	};
 }
 
