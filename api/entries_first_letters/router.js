@@ -15,7 +15,7 @@ const router = {
 			}
 			return firstLetters;
 		}, new Set());
-		res.endJson(
+		res.setStatusCode(200).endJson(
 			Array.from(firstLetters).sort(
 				(firstLetter1, firstLetter2) => (firstLetter1.localeCompare(firstLetter2))
 			)
