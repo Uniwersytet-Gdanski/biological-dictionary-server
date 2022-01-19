@@ -17,7 +17,7 @@ GET /api/entries
 -    `pageSize`: number of entries to be returned (integer, min: 1, max: 300, default: 10)
 
 #### Responses:
-- ##### 400 Bad request
+- ##### 400 Bad Request
     
 - ##### 200 OK
     
@@ -68,7 +68,6 @@ GET /api/entries/{id}
 -    `id`: entry id (string, required)
 
 #### Responses:
-- ##### 400: Bad request
 - ##### 404 Not Found (entry not found)
 - ##### 200 OK
 
@@ -97,6 +96,22 @@ GET /api/entries/{id}
 }
 ```
 
+### DELETE /api/entries/{id}
+Deletes entry with given id.
+
+#### Endpoint: 
+```
+DELETE /api/entries/{id}
+```
+
+#### Path parameters:
+-    `id`: entry id (string, required)
+
+#### Responses:
+- ##### 404 Not Found (entry not found)
+- ##### 204 No Content
+
+
 ### GET /api/entries-by-prefix
 Returns fragment of entries with given prefix based on pagination parameters and informations about pages.
 
@@ -112,7 +127,7 @@ GET /api/entries-by-prefix
 -    `withoutFullEntries`: decides if full entries should be returned (boolean, nullable, default: false)
 
 #### Responses:
-- ##### 400: Bad request
+- ##### 400 Bad Request
 - ##### 200 OK
 
 #### Response example:
@@ -169,7 +184,7 @@ GET /api/search-entries
 -    `withoutFullEntries`: decides if full entries should be returned (boolean, nullable, default: false)
 
 #### Resposes:
-- ##### 400: Bad request
+- ##### 400 Bad Request
 - ##### 200 OK
 
 #### Response example:
@@ -225,7 +240,22 @@ POST /api/login
 -    `password`: password (string, required)
 
 #### Responses:
-- ##### 400: Bad request
+- ##### 400 Bad Request
 - ##### 401	Unauthorized (wrong login or password)
-- ##### 200 OK
+- ##### 204 No Content
 
+### GET /api/entries-first-letters
+Returns list of all possible first letters of entries.
+
+#### Endpoint:
+```
+GET /api/entries-first-letters
+```
+
+#### Responses:
+- ##### 200 OK
+    
+#### Response example:
+```json
+["a","b","c","d","e","f","g","h","i","j","k","l","ł","m","n","o","p","r","s","ś","t","u","w","z","ż"]
+```
