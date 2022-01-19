@@ -111,6 +111,11 @@ class EntriesManager {
 	getAll = function() {
 		return Array.from(this.#entries.values());
 	};
+	deleteById = async function(id) {
+		await Entry.findByIdAndDelete(id).then((entry) => {
+			if (entry) this.#entries.delete(entry.id);
+		});
+	};
 	getById = function(id) {
 		return this.#entries.get(id);
 	};
