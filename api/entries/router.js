@@ -15,7 +15,7 @@ const postBodySchema = yup.object().shape({
 	englishTerms: yup.array().of(yup.object().shape({
 		singular: yup.string().required(),
 		plural: yup.string().required(),
-	})).required(),
+	})).required().min(1),
 });
 
 const entriesManager = require("../../modules/entriesManager.js");
