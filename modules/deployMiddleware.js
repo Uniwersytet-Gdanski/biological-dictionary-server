@@ -2,7 +2,6 @@ const fileByPath = new Map();
 
 const fs = require("fs/promises");
 const fsSync = require("fs");
-const config = require("../config.json");
 const auth = require("../auth.json");
 
 const fsReaddirSyncRecursive = (path) => {
@@ -111,7 +110,7 @@ const mimeTypeByExtension = {
 };
 
 if (fsSync.existsSync("./build")) for (const filepath of fsReaddirSyncRecursive("./build")) {
-	const extension = filepath.match(/\.([^./]*)$/)[1];
+	const extension = filepath.match(/\.([^./]*)$/)?.[1]?.toLowerCase();
 	const mimeType = mimeTypeByExtension[extension] ?? "application/octet-stream";
 	fileByPath.set(filepath, {
 		mimeType,
@@ -123,36 +122,34 @@ if (fsSync.existsSync("./build")) for (const filepath of fsReaddirSyncRecursive(
 
 const deployMiddlewarePost = async (req, res) => {
 	if (req.method !== "POST") {
-		return;
-	}
-	if (req.getDividedPath()[0] !== "deploy") {
-		return;
+		return res.setStatusCode(405).send("Method not allowed");
 	}
 	if (req.getHeader("authorization") !== auth.deployToken) {
-		return res.setStatusCode(401).end();
+		return res.setStatusCode(401).end("Invalid deploy token");
 	}
 	return req.getBody().then((body) => {
 		const filePath = req.getDividedPath().slice(1).join("/");
 		const file = {
-			mimeType: mimeTypeByExtension[filePath.match(/\.([^./]*)$/)[1]] ?? "application/octet-stream",
+			mimeType: mimeTypeByExtension[filePath.match(/\.([^./]*)$/)?.[1].toLowerCase()] ?? "application/octet-stream",
 			content: body,
 		};
 		fileByPath.set(filePath, file);
 		fsWriteFileSyncRecursive("./build/" + filePath, file.content);
-		res.setStatusCode(201).setHeader("location", config.baseUrl + "/" + filePath).end();
+		res.setStatusCode(201).end("OK");
 	});
 };
 
-const deployMiddlewareGet = (req, res) => {
+const deployMiddlewareGet = async (req, res, data, next) => {
 	const filePath = req.getDividedPath().join("/");
-	if (req.getDividedPath()[0] === "api") return;
-	const indexFile = fileByPath.get("index.html");
-	if (!indexFile) return;
+	if (req.getDividedPath()[0] === "api") return await next();
+	const extension = filePath.match(/\.([^./]*)$/)?.[1]?.toLowerCase();
 	if (req.method !== "GET") return res.setStatusCode(405).end();
 	const file = fileByPath.get(filePath);
-	res.setStatusCode(200);
-	if (!file) return res.setHeader("content-type", indexFile.mimeType).end(indexFile.content);
-	res.setHeader("content-type", file.mimeType).end(file.content);
+	const indexFile = fileByPath.get("index.html");
+	if (file) return res.setHeader("content-type", file.mimeType).end(file.content);
+	if (!indexFile) return res.setStatusCode(404).end();
+	if (extension in [undefined, "html", "htm"]) return res.setHeader("content-type", indexFile.mimeType).end(indexFile.content);
+	return res.setStatusCode(404).end();
 };
 
 const deployMiddlewareClear = (req, res) => {
@@ -167,7 +164,7 @@ const deployMiddlewareClear = (req, res) => {
 			}
 		}).catch(() => {});
 	}).catch(() => {});
-	res.setStatusCode(200).end();
+	return res.setStatusCode(202).end();
 };
 
 
