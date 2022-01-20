@@ -7,5 +7,6 @@ module.exports = {
 	errors: {
 		noSessionTokenProvided: "No session token provided.",
 		invalidSessionToken: "Invalid session token.",
+		entryNotFound: (entryId) => (`Entry not found: ${entryId}`),
 	},
 };
