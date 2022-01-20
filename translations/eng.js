@@ -9,4 +9,7 @@ module.exports = {
 		invalidSessionToken: "Invalid session token.",
 		entryNotFound: (entryId) => (`Entry not found: ${entryId}`),
 	},
+	login: {
+		wrongCredentials: "Wrong credentials.",
+	},
 };
