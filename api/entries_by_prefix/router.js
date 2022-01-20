@@ -31,7 +31,7 @@ const router = {
 					entries.push({
 						id: entry.id,
 						name: name,
-						...(!isWithFullEntries && {entry}),
+						...(isWithFullEntries && {entry}),
 					});
 				}
 				return entries;
