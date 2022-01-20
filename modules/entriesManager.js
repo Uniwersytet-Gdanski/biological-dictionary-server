@@ -54,8 +54,10 @@ class LookupTree {
 			this.addEntry(entry);
 		}
 	}
-	#search(node, query, matchByName, score) {
+	#search(node, query, matchByName, score, scoreByVisitedNode) {
 		if (score < 0.5) return;
+		if (scoreByVisitedNode.has(node) && scoreByVisitedNode.get(node) > score) return;
+		scoreByVisitedNode.set(node, score);
 
 		if (query.length == 0) {
 			for (const match of node.matches) {
@@ -71,18 +73,20 @@ class LookupTree {
 		const head = query[0];
 		const tail = query.slice(1);
 		if (head in node.nodeByCharacter) {
-			this.#search(node.nodeByCharacter[head], tail, matchByName, score);
+			this.#search(node.nodeByCharacter[head], tail, matchByName, score, scoreByVisitedNode);
 		}
 		for (const character in node.nodeByCharacter) {
-			this.#search(node.nodeByCharacter[character], query, matchByName, score * 0.8);
+			this.#search(node.nodeByCharacter[character], query, matchByName, score * 0.9, scoreByVisitedNode);
+			this.#search(node.nodeByCharacter[character], tail, matchByName, score * 0.95, scoreByVisitedNode);
 		}
-		this.#search(node, tail, matchByName, score * 0.8);
+		this.#search(node, tail, matchByName, score * 0.9, scoreByVisitedNode);
 	}
 	search(query) {
+		const scoreByVisitedNode = new Map();
 		const matchByName = {};
 		const sanitizedQuery = this.#sanitizeWord(query);
-		this.#search(this.#rootNode, sanitizedQuery, matchByName, 1);
-		return Object.values(matchByName).sort((match1, match2) => match2.score - match1.score);
+		this.#search(this.#rootNode, sanitizedQuery, matchByName, 1, scoreByVisitedNode);
+		return Object.values(matchByName).sort((match1, match2) => (match2.score - match1.score));
 	}
 }
 
