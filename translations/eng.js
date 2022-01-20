@@ -4,4 +4,7 @@ module.exports = {
 		fetchedEntries: (entries) => (`Fetched ${entries.length} entries.`),
 		serverStarted: (server) => (`Server started on port ${server.address().port}.`),
 	},
+	errors: {
+		
+	},
 };
