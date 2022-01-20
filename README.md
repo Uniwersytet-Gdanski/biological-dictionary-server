@@ -1,5 +1,42 @@
 # biological-dictionary-server
 
+## Setup
+
+Installing the dependencies:
+```
+npm install
+```
+
+In order to run the server, you need to create the following files in the root directory of the project:
+
+### auth.json
+This is a json file used to store credentials of any kind.
+```json
+{
+	"mongodb": {
+		"host": "my.mongodb.com",
+		"port": 27017,
+		"database": "ug-biological-dictionary",
+		"username": "server",
+		"password": "hard-password",
+		"replicaSet": "main"
+	},
+	"deployToken": "ciazowy-specjalista-123"
+}
+```
+
+### config.json
+This json file is used to store configuration of the server.
+```json
+{
+	"port": 18292,
+	"baseUrl": "http://dict.gacko.pl",
+	"maxPageSize": 300,
+	"tokenValidityDuration": 533224,
+	"tokenLength": 64
+}
+```
+
 ## API
 
 BASE URL: https://dict.gacko.pl/api
