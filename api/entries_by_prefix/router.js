@@ -12,7 +12,7 @@ const queryParamsSchema = yup.object().shape({
 	prefix: yup.string().required().transform((value) => (value.toLowerCase())),
 	pageNumber: yup.number().integer().min(1).default(1),
 	pageSize: yup.number().integer().min(1).max(maxPageSize).default(10),
-	withFullEntries: yup.boolean().default(false),
+	withFullEntries: yup.boolean().nullable().default(false).transform((value) => (value === null ? true : value)),
 });
 
 const router = {
@@ -27,7 +27,7 @@ const router = {
 			} = await queryParamsSchema.validate(req.getQueryParams());
 			const entries = entriesManager.getAll().reduce((entries, entry) => {
 				for (const name of entry.names) {
-					if (!name.startsWith(prefix)) continue;
+					if (!name.toLowerCase().startsWith(prefix)) continue;
 					entries.push({
 						id: entry.id,
 						name: name,
