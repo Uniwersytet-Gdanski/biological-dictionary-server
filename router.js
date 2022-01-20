@@ -5,8 +5,10 @@ const {
 } = workful.methodsSymbols;
 
 const deployMiddleware = require("./src/modules/deployMiddleware.js");
+const requestLoggerMiddleware = require("./src/modules/requestLoggerMiddleware.js");
 
 const router = [
+	requestLoggerMiddleware,
 	workful.middlewares.cors,
 	deployMiddleware.get,
 	{
