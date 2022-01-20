@@ -5,7 +5,7 @@ const {
 } = workful.methodsSymbols;
 
 
-const entriesManager = require("../../modules/entriesManager.js");
+const entriesManager = require("../../src/modules/entriesManager.js");
 
 const router = {
 	[GET]: (req, res) => {

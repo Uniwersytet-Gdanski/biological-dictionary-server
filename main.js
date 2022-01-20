@@ -1,7 +1,7 @@
-const startMongoose = require("./modules/startMongoose.js");
-const enableTimedConsoleLogs = require("./utils/enableTimedConsoleLogs.js");
-const entriesManager = require("./modules/entriesManager.js");
-const startServer = require("./modules/startServer.js");
+const startMongoose = require("./src/modules/startMongoose.js");
+const enableTimedConsoleLogs = require("./src/utils/enableTimedConsoleLogs.js");
+const entriesManager = require("./src/modules/entriesManager.js");
+const startServer = require("./src/modules/startServer.js");
 const lang = require("./lang.js");
 
 (async () => {

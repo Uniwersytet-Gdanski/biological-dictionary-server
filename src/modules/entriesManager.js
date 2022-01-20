@@ -1,4 +1,4 @@
-const Entry = require("../models/Entry.js");
+const Entry = require("../../models/Entry.js");
 const latinize = require("latinize");
 
 

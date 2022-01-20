@@ -1,5 +1,6 @@
+const yup = require("yup");
 const workful = require("workful");
-const paginate = require("../../modules/paginate.js");
+const paginate = require("../../src/modules/paginate.js");
 
 const {
 	GET,
@@ -7,9 +8,8 @@ const {
 
 const {maxPageSize} = require("../../config.json");
 
-const yupValidationErrorHandler = require("../../modules/yupValidationErrorHandler.js");
 
-const yup = require("yup");
+
 
 const queryParamsSchema = yup.object().shape({
 	query: yup.string().required(),
@@ -18,11 +18,11 @@ const queryParamsSchema = yup.object().shape({
 	pageSize: yup.number().integer().min(1).max(maxPageSize).default(10),
 });
 
-const entriesManager = require("../../modules/entriesManager.js");
+const entriesManager = require("../../src/modules/entriesManager.js");
 
 const router = {
 	[GET]: [
-		yupValidationErrorHandler,
+		workful.middlewares.yup.validateQueryParams(queryParamsSchema),
 		paginate(async (req) => {
 			const {
 				query,

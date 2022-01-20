@@ -15,12 +15,10 @@ const bodySchema = yup.object().shape({
 	password: yup.string().required(),
 });
 
-const yupValidationErrorHandler = require("../../modules/yupValidationErrorHandler.js");
-
 const router = {
 	[POST]: [
 		workful.middlewares.jsonBody,
-		yupValidationErrorHandler,
+		workful.middlewares.yup.validateJsonBody(bodySchema),
 		async (req, res, data) => {
 			const {
 				login,

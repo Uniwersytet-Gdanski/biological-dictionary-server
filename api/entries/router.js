@@ -1,5 +1,7 @@
 const workful = require("workful");
-const paginate = require("../../modules/paginate.js");
+const paginate = require("../../src/modules/paginate.js");
+const entriesManager = require("../../src/modules/entriesManager.js");
+const sessionMiddleware = require("../../src/modules/sessionMiddleware.js");
 
 const {
 	GET,
@@ -18,9 +20,7 @@ const postBodySchema = yup.object().shape({
 	})).required().min(1),
 });
 
-const entriesManager = require("../../modules/entriesManager.js");
 
-const sessionMiddleware = require("../../modules/sessionMiddleware.js");
 
 const {maxPageSize} = require("../../config.json");
 
@@ -29,11 +29,9 @@ const queryParamsSchema = yup.object().shape({
 	pageSize: yup.number().integer().min(1).max(maxPageSize).default(10),
 });
 
-const yupValidationErrorHandler = require("../../modules/yupValidationErrorHandler.js");
-
 const router = {
 	[GET]: [
-		yupValidationErrorHandler,
+		workful.middlewares.yup.validateQueryParams(queryParamsSchema),
 		paginate(async (req) => {
 			const {
 				pageNumber,
@@ -52,7 +50,7 @@ const router = {
 	[POST]: [
 		sessionMiddleware,
 		workful.middlewares.jsonBody,
-		yupValidationErrorHandler,
+		workful.middlewares.yup.validateJsonBody(postBodySchema),
 		async (req, res, data) => {
 			const jsonBody = await postBodySchema.validate(data.jsonBody);
 			await entriesManager.add(jsonBody).then((entry) => {

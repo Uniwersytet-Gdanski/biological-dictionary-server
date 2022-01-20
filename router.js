@@ -4,7 +4,7 @@ const {
 	POST,
 } = workful.methodsSymbols;
 
-const deployMiddleware = require("./modules/deployMiddleware.js");
+const deployMiddleware = require("./src/modules/deployMiddleware.js");
 
 const router = [
 	workful.middlewares.cors,

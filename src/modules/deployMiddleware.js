@@ -2,7 +2,7 @@ const fileByPath = new Map();
 
 const fs = require("fs/promises");
 const fsSync = require("fs");
-const auth = require("../auth.json");
+const auth = require("../../auth.json");
 
 const fsReaddirSyncRecursive = (path) => {
 	const files = [];

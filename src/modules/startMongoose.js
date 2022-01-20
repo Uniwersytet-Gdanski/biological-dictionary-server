@@ -16,7 +16,7 @@ mongoose.plugin((schema) => {
 	});
 });
 
-const auth = require("../auth.json").mongodb;
+const auth = require("../../auth.json").mongodb;
 
 const startMongoose = () => (mongoose.connect(`mongodb://${auth.username}:${auth.password}@${auth.host}:${auth.port}/${auth.database}${"replicaSet" in auth ? `?replicaSet=${auth.replicaSet}` : ""}`));
 

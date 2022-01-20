@@ -1,4 +1,4 @@
-const config = require("../config.json");
+const config = require("../../config.json");
 
 const paginate = (getPage) => async (req, res, data) => {
 	const page = await getPage(req, res, data);

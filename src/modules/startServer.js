@@ -1,7 +1,6 @@
 const workful = require("workful");
-const config = require("../config.json");
-const router = require("../router.js");
-// const {logStdout} = require("../utils/timeLog.js");
+const config = require("../../config.json");
+const router = require("../../router.js");
 
 const startServer = () => (new Promise((resolve, reject) => {
 	const server = workful.createServer(router, [
