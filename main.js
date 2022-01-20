@@ -1,16 +1,17 @@
 const startMongoose = require("./modules/startMongoose.js");
-const {logStdout} = require("./utils/timeLog.js");
+const enableTimedConsoleLogs = require("./utils/enableTimedConsoleLogs.js");
 const entriesManager = require("./modules/entriesManager.js");
 const startServer = require("./modules/startServer.js");
 
 (async () => {
+	enableTimedConsoleLogs();
 	await startMongoose().then(() => {
-		logStdout(`Connected to MongoDB.`);
+		console.log(`Connected to MongoDB.`);
 	});
 	await entriesManager.fetchAll().then((entries) => {
-		logStdout(`Fetched ${entries.length} entries.`);
+		console.log(`Fetched ${entries.length} entries.`);
 	});
 	await startServer().then((server) => {
-		logStdout(`Server started on port ${server.address().port}.`);
+		console.log(`Server started on port ${server.address().port}.`);
 	});
 })();
