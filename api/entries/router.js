@@ -2,14 +2,15 @@ const workful = require("workful");
 const paginate = require("../../src/modules/paginate.js");
 const entriesManager = require("../../src/modules/entriesManager.js");
 const sessionMiddleware = require("../../src/modules/sessionMiddleware.js");
+const yup = require("yup");
+
+const {maxPageSize} = require("../../config.json");
 
 const {
 	GET,
-	DELETE,
 	POST,
 } = workful.methodsSymbols;
 
-const yup = require("yup");
 
 const postBodySchema = yup.object().shape({
 	names: yup.array().of(yup.string().required()).required().min(1),
@@ -19,10 +20,6 @@ const postBodySchema = yup.object().shape({
 		plural: yup.string().required(),
 	})).required().min(1),
 });
-
-
-
-const {maxPageSize} = require("../../config.json");
 
 const queryParamsSchema = yup.object().shape({
 	pageNumber: yup.number().integer().min(1).default(1),
@@ -53,41 +50,15 @@ const router = {
 		workful.middlewares.yup.validateJsonBody(postBodySchema),
 		async (req, res, data) => {
 			const jsonBody = await postBodySchema.validate(data.jsonBody);
-			await entriesManager.add(jsonBody).then((entry) => {
-				res.setStatusCode(200).endJson(entry);
+			return entriesManager.add(jsonBody).then((entry) => {
+				return res.setStatusCode(200).endJson(entry);
 			}).catch((error) => {
 				if (error.code === 11000) return res.setStatusCode(409).end(`Entry with id "${jsonBody.names[0].toLowerCase().replace(/ /g, "-")}" already exists`);
 				throw error;
 			});
 		},
 	],
-	":": [
-		"entryId",
-		{
-			[GET]: (req, res) => {
-				const entryId = req.getPathParam("entryId");
-				const entry = entriesManager.getById(entryId);
-				if (!entry) {
-					res.setStatusCode(404).endText("Not Found, entry not found");
-					return;
-				}
-				res.setStatusCode(200).endJson(entry);
-			},
-			[DELETE]: [
-				sessionMiddleware,
-				async (req, res) => {
-					const entryId = req.getPathParam("entryId");
-					const entry = entriesManager.getById(entryId);
-					if (!entry) {
-						res.setStatusCode(404).endText("Not Found, entry not found");
-						return;
-					}
-					await entriesManager.deleteById(entryId);
-					res.setStatusCode(204).end();
-				},
-			],
-		},
-	],
+	":": require("./entryId/router.js"),
 };
 
 module.exports = router;
