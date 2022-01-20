@@ -5,6 +5,7 @@ module.exports = {
 		serverStarted: (server) => (`Server started on port ${server.address().port}.`),
 	},
 	errors: {
-		
+		noSessionTokenProvided: "No session token provided.",
+		invalidSessionToken: "Invalid session token.",
 	},
 };
