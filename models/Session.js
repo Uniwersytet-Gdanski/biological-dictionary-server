@@ -1,18 +1,28 @@
 const {Schema, model} = require("mongoose");
-const {v4: uuidv4} = require("uuid");
 
 
 const sessionSchema = new Schema({
 	_id: {
 		type: String,
-		default: uuidv4,
 	},
-	adminId: String,
+	adminId: {
+		type: String,
+		required: true,
+	},
 	token: {
 		type: String,
 		unique: true,
 	},
-	expireTimestamp: Number,
+	createdAt: {
+		type: Date,
+		required: true,
+	},
+	expiresAt: {
+		type: Date,
+		required: true,
+	},
 });
+
+// sessionSchema.index({"expiresAt": 1}, {expireAfterSeconds: 1});
 
 module.exports = model("Session", sessionSchema, "sessions");

@@ -8,6 +8,7 @@ const {
 	POST,
 } = workful.methodsSymbols;
 
+const {v4: uuidv4} = require("uuid");
 const yup = require("yup");
 
 const bodySchema = yup.object().shape({
@@ -34,12 +35,15 @@ const router = {
 				res.setStatusCode(401).end("Invalid password");
 				return;
 			}
+			const now = new Date();
 			const session = await Session.create({
+				id: uuidv4(),
 				adminId: adminCredentials.id,
-				token: crypto.randomBytes(config.tokenLength).toString("hex"),
-				expireTimestamp: Date.now() / 1000 + config.tokenValidityDuration,
+				token: crypto.randomBytes(config.session.tokenLength).toString("hex"),
+				createdAt: now,
+				expiresAt: new Date(now.getTime() + config.session.tokenValidityDuration * 1000)
 			});
-			res.setStatusCode(204).setCookie("sessionToken", session.token).setCookie("sessionId", session.id).end();
+			return res.setStatusCode(204).setCookie("sessionToken", session.token).setCookie("sessionId", session.id).end();
 		},
 	],
 };
