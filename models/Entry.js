@@ -1,11 +1,6 @@
 const {Schema, model} = require("mongoose");
 const entrySchema = new Schema({
-	_id: {
-		type: String,
-		default: function() {
-			return this.names[0].toLowerCase().replace(/ /g, "-");
-		}
-	},
+	_id: String,
 	names: [String],
 	englishTerms: [{
 		_id: false,
