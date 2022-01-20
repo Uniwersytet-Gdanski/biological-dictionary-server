@@ -4,7 +4,7 @@
     "latinize": "^0.5.0",
     "mongoose": "^6.1.4",
     "uuid": "^8.3.2",
-    "workful": "^2.2.0",
+    "workful": "^2.2.2",
     "yup": "^0.32.11"
   },
   "name": "ug-biological-dictionary-server",
