@@ -1,4 +1,3 @@
-
 const mimeTypeByExtension = {
 	"aac": "audio/aac",
 	"abw": "application/x-abiword",
