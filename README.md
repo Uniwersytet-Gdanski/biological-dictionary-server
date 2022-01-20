@@ -226,7 +226,7 @@ GET /api/entries-by-prefix
         "name": "aberracja chromatyczna",
         "entry": {
             "names": [
-            "aberracja chromatyczna"
+                "aberracja chromatyczna"
             ],
             "englishTerms": [
             {
