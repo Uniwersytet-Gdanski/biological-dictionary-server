@@ -4,20 +4,21 @@ const getLogTextTimestamp = () => {
 	return `[${textTimestamp}]`;
 };
 
+const log = console.log;
+const error = console.error;
+const warn = console.warn;
+const info = console.info;
+
 const enableTimedConsoleLogs = () => {
-	const log = console.log;
 	console.log = (...args) => (
 		log(getLogTextTimestamp(), ...args)
 	);
-	const error = console.error;
 	console.error = (...args) => (
 		error(getLogTextTimestamp(), ...args)
 	);
-	const warn = console.warn;
 	console.warn = (...args) => (
 		warn(getLogTextTimestamp(), ...args)
 	);
-	const info = console.info;
 	console.info = (...args) => (
 		info(getLogTextTimestamp(), ...args)
 	);
