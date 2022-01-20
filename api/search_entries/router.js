@@ -13,7 +13,7 @@ const {maxPageSize} = require("../../config.json");
 
 const queryParamsSchema = yup.object().shape({
 	query: yup.string().required(),
-	withoutFullEntries: yup.boolean().nullable().transform((value) => (value === null ? true : value)),
+	withFullEntries: yup.boolean().nullable().default(false).transform((value) => (value === null ? true : value)),
 	pageNumber: yup.number().integer().min(1).default(1),
 	pageSize: yup.number().integer().min(1).max(maxPageSize).default(10),
 });
@@ -28,7 +28,7 @@ const router = {
 				query,
 				pageNumber,
 				pageSize,
-				withoutFullEntries: isWithoutFullEntries,
+				withFullEntries: isWithFullEntries,
 			} = await queryParamsSchema.validate(req.getQueryParams());
 			const searchResults = entriesManager.search(query);
 			return {
@@ -40,7 +40,7 @@ const router = {
 					id: searchResults.id,
 					name: searchResults.name,
 					score: searchResults.score,
-					...(!isWithoutFullEntries && {entry: searchResults.entry}),
+					...(isWithFullEntries && {entry: searchResults.entry}),
 				})),
 			};
 		})
