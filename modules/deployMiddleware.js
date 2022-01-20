@@ -144,13 +144,11 @@ const deployMiddlewareGet = async (req, res, data, next) => {
 	if (req.getDividedPath()[0] === "api") return await next();
 	const extension = filePath.match(/\.([^./]*)$/)?.[1]?.toLowerCase();
 	if (req.method !== "GET") return res.setStatusCode(405).end();
-	console.log(`${req.method} ${req.getPath()}`);
 	const file = fileByPath.get(filePath);
 	const indexFile = fileByPath.get("index.html");
-	console.log(file, indexFile, extension);
 	if (file) return res.setHeader("content-type", file.mimeType).end(file.content);
 	if (!indexFile) return res.setStatusCode(404).end();
-	if (extension in [undefined, "html", "htm"]) return res.setHeader("content-type", indexFile.mimeType).end(indexFile.content);
+	if ([undefined, "html", "htm"].includes(extension)) return res.setHeader("content-type", indexFile.mimeType).end(indexFile.content);
 	return res.setStatusCode(404).end();
 };
 
