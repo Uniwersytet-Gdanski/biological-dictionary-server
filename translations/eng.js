@@ -1,13 +1,13 @@
 module.exports = {
 	log: {
 		connectedToMongoDb: "Connected to MongoDB.",
-		fetchedEntries: (entries) => (`Fetched ${entries.length} entries.`),
+		fetchedTerms: (terms) => (`Fetched ${terms.length} terms.`),
 		serverStarted: (server) => (`Server started on port ${server.address().port}.`),
 	},
 	errors: {
 		noSessionTokenProvided: "No session token provided.",
 		invalidSessionToken: "Invalid session token.",
-		entryNotFound: (entryId) => (`Entry not found: ${entryId}`),
+		termNotFound: (termId) => (`Term not found: ${termId}`),
 	},
 	login: {
 		wrongCredentials: "Wrong credentials.",

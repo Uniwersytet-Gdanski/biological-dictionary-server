@@ -13,12 +13,12 @@ const {maxPageSize} = require("../../config.json");
 
 const queryParamsSchema = yup.object().shape({
 	query: yup.string().required(),
-	withFullEntries: yup.boolean().nullable().default(false).transform((value) => (value === null ? true : value)),
+	withFullTerms: yup.boolean().nullable().default(false).transform((value) => (value === null ? true : value)),
 	pageNumber: yup.number().integer().min(1).default(1),
 	pageSize: yup.number().integer().min(1).max(maxPageSize).default(10),
 });
 
-const entriesManager = require("../../src/modules/entriesManager.js");
+const termsManager = require("../../src/modules/termsManager.js");
 
 const router = {
 	[GET]: [
@@ -28,9 +28,9 @@ const router = {
 				query,
 				pageNumber,
 				pageSize,
-				withFullEntries: isWithFullEntries,
+				withFullTerms: isWithFullTerms,
 			} = await queryParamsSchema.validate(req.getQueryParams());
-			const searchResults = entriesManager.search(query);
+			const searchResults = termsManager.search(query);
 			return {
 				pageNumber,
 				pageSize,
@@ -40,7 +40,7 @@ const router = {
 					id: searchResults.id,
 					name: searchResults.name,
 					score: searchResults.score,
-					...(isWithFullEntries && {entry: searchResults.entry}),
+					...(isWithFullTerms && {term: searchResults.term}),
 				})),
 			};
 		})

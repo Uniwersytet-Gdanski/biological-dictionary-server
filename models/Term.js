@@ -1,8 +1,8 @@
 const {Schema, model} = require("mongoose");
-const entrySchema = new Schema({
+const termSchema = new Schema({
 	_id: String,
 	names: [String],
-	englishTerms: [{
+	englishTranslations: [{
 		_id: false,
 		singular: String,
 		plural: String,
@@ -10,4 +10,4 @@ const entrySchema = new Schema({
 	definition: String,
 });
 
-module.exports = model("Entry", entrySchema, "entries");
+module.exports = model("Term", termSchema, "terms");

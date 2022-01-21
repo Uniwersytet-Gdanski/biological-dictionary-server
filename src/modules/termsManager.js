@@ -1,4 +1,4 @@
-const Entry = require("../../models/Entry.js");
+const Term = require("../../models/Term.js");
 const latinize = require("latinize");
 const calculatePermutations = require("../utils/calculatePermutations.js");
 
@@ -24,24 +24,24 @@ class LookupTree {
 		}
 		this.#addToNode(node.nodeByCharacter[character], query.slice(1), match);
 	}
-	addEntry(entry) {
-		for (const name of entry.names) {
+	addTerm(term) {
+		for (const name of term.names) {
 			const sanitizedName = this.#sanitizeWord(name);
 			for (const dividedSanitizedPermutedName of calculatePermutations(sanitizedName.split(" "))) {
 				const sanitizedPermutedName = dividedSanitizedPermutedName.join(" ");
 
 				this.#addToNode(this.#rootNode, sanitizedPermutedName, {
-					id: entry.id,
+					id: term.id,
 					name,
-					entry,
+					term,
 				});
 			}
 		}
 	}
 
-	constructor(entries = []) {
-		for (const entry of entries) {
-			this.addEntry(entry);
+	constructor(terms = []) {
+		for (const term of terms) {
+			this.addTerm(term);
 		}
 	}
 	#search(node, query, matchByName, score) {
@@ -77,48 +77,48 @@ class LookupTree {
 }
 
 
-class EntriesManager {
-	#entries = new Map();
+class TermsManager {
+	#terms = new Map();
 	#lookupTree = new LookupTree();
-	addToTree = function(entry) {
-		this.#entries.set(entry.id, entry);
-		this.#lookupTree.addEntry(entry);
+	addToTree = function(term) {
+		this.#terms.set(term.id, term);
+		this.#lookupTree.addTerm(term);
 	};
 	fetchAll = async function() {
-		return Entry.find({}).then((entries) => {
-			for (const entry of entries) {
-				this.addToTree(entry.toJSON());
+		return Term.find({}).then((terms) => {
+			for (const term of terms) {
+				this.addToTree(term.toJSON());
 			}
-			return entries;
+			return terms;
 		});
 	};
 	fetchById = async function(id) {
-		return Entry.findById(id).then((entry) => {
-			if (entry) this.addToTree(entry.toJSON());
-			return entry;
+		return Term.findById(id).then((term) => {
+			if (term) this.addToTree(term.toJSON());
+			return term;
 		});
 	};
 	getAll = function() {
-		return Array.from(this.#entries.values());
+		return Array.from(this.#terms.values());
 	};
 	deleteById = async function(id) {
-		await Entry.findByIdAndDelete(id).then((entry) => {
-			if (entry) this.#entries.delete(entry.id);
+		await Term.findByIdAndDelete(id).then((term) => {
+			if (term) this.#terms.delete(term.id);
 		});
 	};
 	getById = function(id) {
-		return this.#entries.get(id);
+		return this.#terms.get(id);
 	};
 	search = function(query) {
 		return this.#lookupTree.search(query);
 	};
-	add = async function(entry) {
-		return Entry.create(entry).then((entry) => {
-			return entry;
+	add = async function(term) {
+		return Term.create(term).then((term) => {
+			return term;
 		});
 	};
 }
 
-const entriesManager = new EntriesManager();
+const termsManager = new TermsManager();
 
-module.exports = entriesManager;
+module.exports = termsManager;

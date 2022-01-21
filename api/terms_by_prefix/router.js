@@ -1,7 +1,7 @@
 const workful = require("workful");
 const yup = require("yup");
 const paginate = require("../../src/modules/paginate.js");
-const entriesManager = require("../../src/modules/entriesManager.js");
+const termsManager = require("../../src/modules/termsManager.js");
 
 const {maxPageSize} = require("../../config.json");
 const {
@@ -12,7 +12,7 @@ const queryParamsSchema = yup.object().shape({
 	prefix: yup.string().required().transform((value) => (value.toLowerCase())),
 	pageNumber: yup.number().integer().min(1).default(1),
 	pageSize: yup.number().integer().min(1).max(maxPageSize).default(10),
-	withFullEntries: yup.boolean().nullable().default(false).transform((value) => (value === null ? true : value)),
+	withFullTerms: yup.boolean().nullable().default(false).transform((value) => (value === null ? true : value)),
 });
 
 const router = {
@@ -23,25 +23,25 @@ const router = {
 				prefix,
 				pageNumber,
 				pageSize,
-				withFullEntries: isWithFullEntries,
+				withFullTerms: isWithFullTerms,
 			} = await queryParamsSchema.validate(req.getQueryParams());
-			const entries = entriesManager.getAll().reduce((entries, entry) => {
-				for (const name of entry.names) {
+			const terms = termsManager.getAll().reduce((terms, term) => {
+				for (const name of term.names) {
 					if (!name.toLowerCase().startsWith(prefix)) continue;
-					entries.push({
-						id: entry.id,
+					terms.push({
+						id: term.id,
 						name: name,
-						...(isWithFullEntries && {entry}),
+						...(isWithFullTerms && {term}),
 					});
 				}
-				return entries;
-			}, []).sort((entry1, entry2) => (entry1.name.localeCompare(entry2.name)));
+				return terms;
+			}, []).sort((term1, term2) => (term1.name.localeCompare(term2.name)));
 			return {
 				pageNumber,
 				pageSize,
 				maxPageSize,
-				pagesCount: Math.ceil(entries.length / pageSize),
-				data: entries.slice((pageNumber - 1) * pageSize, pageNumber * pageSize),
+				pagesCount: Math.ceil(terms.length / pageSize),
+				data: terms.slice((pageNumber - 1) * pageSize, pageNumber * pageSize),
 			};
 		}),
 	],
