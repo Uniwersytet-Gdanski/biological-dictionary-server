@@ -9,7 +9,7 @@ const {
 } = workful.methodsSymbols;
 
 const queryParamsSchema = yup.object().shape({
-	prefix: yup.string().required().transform((value) => (value.toLowerCase())),
+	prefix: yup.string().nullable().default("").transform((value) => (value.toLowerCase())),
 	pageNumber: yup.number().integer().min(1).default(1),
 	pageSize: yup.number().integer().min(1).max(maxPageSize).default(10),
 	withFullTerms: yup.boolean().nullable().default(false).transform((value) => (value === null ? true : value)),
