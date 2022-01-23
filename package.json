@@ -12,7 +12,8 @@
   "version": "0.0.0",
   "main": "main.js",
   "scripts": {
-    "start": "node main.js"
+    "start": "node main.js",
+	"test": "jest"
   },
   "repository": {
     "type": "git",
@@ -25,6 +26,7 @@
   },
   "homepage": "https://github.com/Uniwersytet-Gdanski/biological-dictionary-server#readme",
   "devDependencies": {
-    "eslint": "^8.6.0"
+    "eslint": "^8.6.0",
+    "jest": "^27.4.7"
   }
 }
