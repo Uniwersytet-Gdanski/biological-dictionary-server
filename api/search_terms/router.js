@@ -6,7 +6,7 @@ const {
 	GET,
 } = workful.methodsSymbols;
 
-const {maxPageSize} = require("../../config.json");
+const {maxPageSize} = require("../../config.json").paging;
 
 
 

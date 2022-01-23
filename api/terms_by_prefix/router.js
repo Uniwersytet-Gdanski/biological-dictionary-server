@@ -3,7 +3,7 @@ const yup = require("yup");
 const paginate = require("../../src/modules/paginate.js");
 const termsManager = require("../../src/modules/termsManager.js");
 
-const {maxPageSize} = require("../../config.json");
+const {maxPageSize} = require("../../config.json").paging;
 const {
 	GET,
 } = workful.methodsSymbols;

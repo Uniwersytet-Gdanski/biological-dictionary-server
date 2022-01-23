@@ -5,7 +5,7 @@ const sessionMiddleware = require("../../src/modules/sessionMiddleware.js");
 const yup = require("yup");
 const lang = require("../../src/modules/lang.js");
 
-const {maxPageSize} = require("../../config.json");
+const {maxPageSize} = require("../../config.json").paging;
 
 const {
 	GET,
