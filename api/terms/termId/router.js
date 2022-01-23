@@ -43,9 +43,9 @@ const router = [
 			sessionMiddleware,
 			workful.middlewares.jsonBody,
 			workful.middlewares.yup.validateJsonBody(termSchema),
-			async (req, res, {yupJsonBody}) => {
-				await termsManager.updateById(yupJsonBody.id, yupJsonBody).then((term) => {
-					return res.setStatusCode(200).endJson(term);
+			async (req, res, {term, yupJsonBody}) => {
+				await termsManager.updateById(term.id, yupJsonBody).then((newTerm) => {
+					return res.setStatusCode(200).endJson(newTerm);
 				});
 			}
 		],
