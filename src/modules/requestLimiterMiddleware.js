@@ -15,7 +15,6 @@ const refresh = () => {
 setInterval(refresh, refreshInterval * 1000);
 
 const requestLimiterMiddleware = async (req, res, data, next) => {
-	console.log(lastRequestsCountByAddress);
 	const address = req.getHeader("real-remote-address") || req.socket.remoteAddress;
 	if (lastRequestsCountByAddress.get(address) >= 100) {
 		return res.setHeader("retry-after", Math.ceil(refreshInterval)).setStatusCode(429).endText(lang("requestLimiter.tooManyRequests"));
