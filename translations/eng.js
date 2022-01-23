@@ -10,6 +10,7 @@ module.exports = {
 	},
 	terms: {
 		termNotFound: (termId) => (`Term not found: ${termId}`),
+		termAlreadyExists: (termId) => (`Term already exists: ${termId}`),
 	},
 	login: {
 		wrongCredentials: "Wrong credentials.",
