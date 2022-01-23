@@ -39,7 +39,12 @@ const router = {
 					searchResults.push(searchResult);
 				}
 				return acc;
-			}, {searchResults: [], usedIds: new Set()}).searchResults : searchResults))(termsManager.search(query));
+			}, {searchResults: [], usedIds: new Set()}).searchResults : searchResults))(termsManager.search(query).map((match) => ({
+				id: match.entry.result.id,
+				term: match.entry.result,
+				name: match.entry.query,
+				score: match.score,
+			})));
 			return {
 				pageNumber,
 				pageSize,

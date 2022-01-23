@@ -1,7 +1,7 @@
 module.exports = {
 	log: {
 		connectedToMongoDb: "Connected to MongoDB.",
-		fetchedTerms: (terms) => (`Fetched ${terms.length} terms.`),
+		syncedTerms: (terms) => (`Synced ${terms.length} terms.`),
 		serverStarted: (server) => (`Server started on port ${server.address().port}.`),
 	},
 	errors: {

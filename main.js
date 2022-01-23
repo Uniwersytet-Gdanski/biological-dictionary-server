@@ -9,8 +9,8 @@ const lang = require("./src/modules/lang.js");
 	await startMongoose().then(() => {
 		console.log(lang("log.connectedToMongoDb"));
 	});
-	await termsManager.fetchAll().then((terms) => {
-		console.log(lang("log.fetchedTerms", terms));
+	await termsManager.sync().then(() => {
+		console.log(lang("log.syncedTerms", termsManager.getAll()));
 	});
 	await startServer().then((server) => {
 		console.log(lang("log.serverStarted", server));
