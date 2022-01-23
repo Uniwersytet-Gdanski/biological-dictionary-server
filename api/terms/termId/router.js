@@ -43,9 +43,12 @@ const router = [
 			sessionMiddleware,
 			workful.middlewares.jsonBody,
 			workful.middlewares.yup.validateJsonBody(termSchema),
-			async (req, res, {term, yupJsonBody}) => {
-				await termsManager.updateById(term.id, yupJsonBody).then((newTerm) => {
+			async (req, res, {yupJsonBody}) => {
+				await termsManager.updateById(yupJsonBody.id, yupJsonBody).then((newTerm) => {
 					return res.setStatusCode(200).endJson(newTerm);
+				}).catch((error) => {
+					if (error.code === 11000) return res.setStatusCode(409).end(lang("terms.termAlreadyExists", {termId: yupJsonBody.id}));
+					throw error;
 				});
 			}
 		],
