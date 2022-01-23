@@ -3,6 +3,7 @@ const paginate = require("../../src/modules/paginate.js");
 const termsManager = require("../../src/modules/termsManager.js");
 const sessionMiddleware = require("../../src/modules/sessionMiddleware.js");
 const yup = require("yup");
+const lang = require("../../src/modules/lang.js");
 
 const {maxPageSize} = require("../../config.json");
 
@@ -47,7 +48,7 @@ const router = {
 			return termsManager.addTerm(jsonBody).then((term) => {
 				return res.setStatusCode(200).endJson(term);
 			}).catch((error) => {
-				if (error.code === 11000) return res.setStatusCode(409).end(`Term with id "${jsonBody.names[0].toLowerCase().replace(/ /g, "-")}" already exists`);
+				if (error.code === 11000) return res.setStatusCode(409).end(lang("terms.termAlreadyExists", {term}));
 				throw error;
 			});
 		},

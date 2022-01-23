@@ -21,10 +21,16 @@ class TermsManager {
 		}
 	};
 
-	addTerm = function(term) {
+	postTerm = async function(term) {
+		return this.Term.create(term).then((term) => {
+			this.addTerm(term);
+			return term;
+		});
+	};
+	addTerm = async function(term) {
 		this.#terms.set(term.id, term);
 		this.#updateLookupTree();
-	};
+	}
 	addTerms = function(terms) {
 		for (const term of terms) {
 			this.#terms.set(term.id, term);
@@ -53,9 +59,10 @@ class TermsManager {
 
 	removeById = async function(id) {
 		if (!this.#terms.has(id)) return;
-		this.#terms.delete(id);
-		this.#updateLookupTree();
-
+		return this.Term.findByIdAndDelete(id).then(() => {
+			this.#terms.delete(id);
+			this.#updateLookupTree();
+		});
 	}
 	search = function(query) {
 		return this.#lookupTree.search(query);
