@@ -45,6 +45,7 @@ const router = {
 				pageSize,
 				maxPageSize,
 				pagesCount: Math.ceil(searchResults.length / pageSize),
+				estimatedDataCount: searchResults.length,
 				data: searchResults.slice((pageNumber - 1) * pageSize, pageNumber * pageSize).map((searchResults) => ({
 					id: searchResults.id,
 					name: searchResults.name,

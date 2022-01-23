@@ -40,6 +40,7 @@ const router = {
 				pageNumber,
 				pageSize,
 				maxPageSize,
+				estimatedDataCount: terms.length,
 				pagesCount: Math.ceil(terms.length / pageSize),
 				data: terms.slice((pageNumber - 1) * pageSize, pageNumber * pageSize),
 			};
