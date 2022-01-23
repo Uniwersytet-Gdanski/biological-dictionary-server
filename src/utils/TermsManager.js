@@ -21,11 +21,11 @@ class TermsManager {
 		}
 	};
 
-	_addTerm = function(term) {
+	addTerm = function(term) {
 		this.#terms.set(term.id, term);
 		this.#updateLookupTree();
 	};
-	_addTerms = function(terms) {
+	addTerms = function(terms) {
 		for (const term of terms) {
 			this.#terms.set(term.id, term);
 		}
@@ -34,7 +34,7 @@ class TermsManager {
 	sync = async function() {
 		await this.Term.find({}).then((fetchedTerms) => {
 			this.#terms = new Map();
-			this._addTerms(fetchedTerms);
+			this.addTerms(fetchedTerms);
 		});
 	}
 	// fetchEntryById = async function(id) {
@@ -51,7 +51,7 @@ class TermsManager {
 		return this.#terms.get(id);
 	}
 
-	_removeById = async function(id) {
+	removeById = async function(id) {
 		if (!this.#terms.has(id)) return;
 		this.#terms.delete(id);
 		this.#updateLookupTree();
