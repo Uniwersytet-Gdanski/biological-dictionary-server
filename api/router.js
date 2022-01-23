@@ -4,6 +4,7 @@ const router = {
 	"terms-by-prefix": require("./terms_by_prefix/router.js"),
 	"login": require("./login/router.js"),
 	"terms-first-letters": require("./terms_first_letters/router.js"),
+	"logout": require("./logout/router.js"),
 };
 
 module.exports = router;
