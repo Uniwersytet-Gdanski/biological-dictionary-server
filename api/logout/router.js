@@ -1,5 +1,4 @@
 const workful = require("workful");
-const lang = require("../../src/modules/lang.js");
 const sessionMiddleware = require("../../src/modules/sessionMiddleware.js");
 
 
@@ -17,7 +16,7 @@ const router = {
 					["max-age"]: 0,
 				}).setCookie("sessionId", "", {
 					["max-age"]: 0,
-				}).endText(lang("logout.success"));
+				}).end();
 			});
 		},
 	],
