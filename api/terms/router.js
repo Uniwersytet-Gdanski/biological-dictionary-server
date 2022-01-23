@@ -22,11 +22,11 @@ const queryParamsSchema = yup.object().shape({
 const router = {
 	[GET]: [
 		workful.middlewares.yup.validateQueryParams(queryParamsSchema),
-		paginate(async (req) => {
+		paginate(async (req, res, {yupJsonBody}) => {
 			const {
 				pageNumber,
 				pageSize,
-			} = await queryParamsSchema.validate(req.getQueryParams());
+			} = yupJsonBody;
 			const terms = termsManager.getAll();
 			return {
 				pageNumber,

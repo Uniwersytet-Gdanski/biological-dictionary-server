@@ -24,14 +24,14 @@ const termsManager = require("../../src/modules/termsManager.js");
 const router = {
 	[GET]: [
 		workful.middlewares.yup.validateQueryParams(queryParamsSchema),
-		paginate(async (req) => {
+		paginate(async (req, res, {yupQueryParams}) => {
 			const {
 				query,
 				pageNumber,
 				pageSize,
 				withFullTerms: isWithFullTerms,
 				withoutDuplicates: isWithoutDuplicates,
-			} = await queryParamsSchema.validate(req.getQueryParams());
+			} = yupQueryParams;
 			const searchResults = ((searchResults) => (isWithoutDuplicates ? searchResults.reduce((acc, searchResult) => {
 				const {searchResults, usedIds} = acc;
 				if (!usedIds.has(searchResult.id)) {

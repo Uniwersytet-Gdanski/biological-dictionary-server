@@ -23,11 +23,11 @@ const router = {
 	[POST]: [
 		workful.middlewares.jsonBody,
 		workful.middlewares.yup.validateJsonBody(bodySchema),
-		async (req, res, data) => {
+		async (req, res, {yupJsonBody}) => {
 			const {
 				login,
 				password,
-			} = await bodySchema.validate(data.jsonBody);
+			} = yupJsonBody;
 			const adminCredentials = await AdminCredentials.findOne({login});
 			if (!adminCredentials) {
 				return new Promise((resolve, reject) => {

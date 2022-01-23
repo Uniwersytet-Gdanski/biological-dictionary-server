@@ -18,13 +18,13 @@ const queryParamsSchema = yup.object().shape({
 const router = {
 	[GET]: [
 		workful.middlewares.yup.validateQueryParams(queryParamsSchema),
-		paginate(async (req) => {
+		paginate(async (req, res, {yupQueryParams}) => {
 			const {
 				prefix,
 				pageNumber,
 				pageSize,
 				withFullTerms: isWithFullTerms,
-			} = await queryParamsSchema.validate(req.getQueryParams());
+			} = yupQueryParams;
 			const terms = termsManager.getAll().reduce((terms, term) => {
 				for (const name of term.names) {
 					if (!name.toLowerCase().startsWith(prefix)) continue;
