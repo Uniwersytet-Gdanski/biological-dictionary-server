@@ -14,4 +14,7 @@ module.exports = {
 	login: {
 		wrongCredentials: "Wrong credentials.",
 	},
+	requestLimiter: {
+		tooManyRequests: "Too many requests.",
+	},
 };
