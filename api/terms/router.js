@@ -4,6 +4,7 @@ const termsManager = require("../../src/modules/termsManager.js");
 const sessionMiddleware = require("../../src/modules/sessionMiddleware.js");
 const yup = require("yup");
 const lang = require("../../src/modules/lang.js");
+const termNameToId = require("../../src/utils/termNameToId.js");
 
 const {maxPageSize} = require("../../config.json").paging;
 
@@ -44,7 +45,8 @@ const router = {
 		workful.middlewares.jsonBody,
 		workful.middlewares.yup.validateJsonBody(termSchema),
 		async (req, res, {yupJsonBody}) => {
-			return termsManager.postTerm(yupJsonBody).then((term) => {
+			const newTermId = termNameToId(yupJsonBody.names[0]);
+			return termsManager.postTerm({id: newTermId, ...yupJsonBody}).then((term) => {
 				return res.setStatusCode(200).endJson(term);
 			}).catch((error) => {
 				if (error.code === 11000) return res.setStatusCode(409).end(lang("terms.termAlreadyExists", {termId: yupJsonBody.id}));

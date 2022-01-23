@@ -2,6 +2,7 @@ const workful = require("workful");
 const termsManager = require("../../../src/modules/termsManager.js");
 const sessionMiddleware = require("../../../src/modules/sessionMiddleware.js");
 const lang = require("../../../src/modules/lang.js");
+const termNameToId = require("../../../src/utils/termNameToId.js");
 
 const {
 	GET,
@@ -44,7 +45,8 @@ const router = [
 			workful.middlewares.jsonBody,
 			workful.middlewares.yup.validateJsonBody(termSchema),
 			async (req, res, {yupJsonBody}) => {
-				await termsManager.updateById(yupJsonBody.id, yupJsonBody).then((newTerm) => {
+				const newTermId = termNameToId(yupJsonBody.names[0]);
+				await termsManager.updateById(yupJsonBody.id, {id: newTermId, ...yupJsonBody}).then((newTerm) => {
 					return res.setStatusCode(200).endJson(newTerm);
 				}).catch((error) => {
 					if (error.code === 11000) return res.setStatusCode(409).end(lang("terms.termAlreadyExists", {termId: yupJsonBody.id}));
