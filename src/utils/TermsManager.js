@@ -47,6 +47,10 @@ class TermsManager {
 		return Array.from(this.#terms.values());
 	}
 
+	getById = function(id) {
+		return this.#terms.get(id);
+	}
+
 	_removeById = async function(id) {
 		if (!this.#terms.has(id)) return;
 		this.#terms.delete(id);
