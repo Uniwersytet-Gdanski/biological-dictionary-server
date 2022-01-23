@@ -4,9 +4,11 @@ module.exports = {
 		syncedTerms: (terms) => (`Synced ${terms.length} terms.`),
 		serverStarted: (server) => (`Server started on port ${server.address().port}.`),
 	},
-	errors: {
+	session: {
 		noSessionTokenProvided: "No session token provided.",
 		invalidSessionToken: "Invalid session token.",
+	},
+	terms: {
 		termNotFound: (termId) => (`Term not found: ${termId}`),
 	},
 	login: {
