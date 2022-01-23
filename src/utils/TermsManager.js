@@ -43,12 +43,7 @@ class TermsManager {
 			this.addTerms(fetchedTerms);
 		});
 	}
-	// fetchEntryById = async function(id) {
-	// 	await Term.findById(id).then((fetchedTerm) => {
-	// 		if (!fetchedTerm) return;
-	// 		this.addTerm(fetchedTerm);
-	// 	});
-	// }
+
 	getAll = function() {
 		return Array.from(this.#terms.values());
 	}
