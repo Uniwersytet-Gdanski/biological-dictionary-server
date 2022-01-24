@@ -5,7 +5,8 @@ class TermsManager {
 	#lookupTree = new LookupTree();
 	#terms = new Map();
 	syncInterval = null;
-	constructor(Term, termsSyncInterval) {
+	constructor(mongoose, Term, termsSyncInterval) {
+		this.mongoose = mongoose;
 		this.Term = Term;
 		this.syncInterval = setInterval(this.sync.bind(this), termsSyncInterval * 1000);
 	}
@@ -21,17 +22,17 @@ class TermsManager {
 		}
 	};
 
-	postTerm = async function(term) {
+	post = async function(term) {
 		return this.Term.create(term).then((term) => {
-			this.addTerm(term);
+			this.#add(term);
 			return term;
 		});
 	};
-	addTerm = async function(term) {
+	#add = async function(term) {
 		this.#terms.set(term.id, term);
 		this.#updateLookupTree();
 	}
-	addTerms = function(terms) {
+	#addMany = function(terms) {
 		for (const term of terms) {
 			this.#terms.set(term.id, term);
 		}
@@ -40,7 +41,7 @@ class TermsManager {
 	sync = async function() {
 		await this.Term.find({}).then((fetchedTerms) => {
 			this.#terms = new Map();
-			this.addTerms(fetchedTerms);
+			this.#addMany(fetchedTerms);
 		});
 	}
 
@@ -52,15 +53,30 @@ class TermsManager {
 		return this.#terms.get(id);
 	}
 
-	removeById = async function(id) {
-		if (!this.#terms.has(id)) return;
-		return this.Term.findByIdAndDelete(id).then(() => {
-			this.#terms.delete(id);
+	delete = async function(term) {
+		return term.delete().then(() => {
+			this.#terms.delete(term.id);
 			this.#updateLookupTree();
+			return term;
 		});
 	}
 	search = function(query) {
 		return this.#lookupTree.search(query);
+	}
+	update = async function(term, newTerm) {
+		const session = await this.mongoose.startSession();
+		let updatedTermAcc;  // workaround for withTransaction doesnt returning updatedTerm
+		return session.withTransaction(async () => {
+			await term.delete({session});
+			const [updatedTerm] = await this.Term.create([newTerm], {session});
+
+			this.#terms.delete(term.id);
+			this.#terms.set(updatedTerm.id, updatedTerm);
+			this.#updateLookupTree();
+			console.log("updated term", updatedTerm);
+			updatedTermAcc = updatedTerm;
+			return;
+		}).then(() => (updatedTermAcc));
 	}
 }
 

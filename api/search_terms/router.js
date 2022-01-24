@@ -19,12 +19,10 @@ const queryParamsSchema = yup.object().shape({
 	pageSize: yup.number().integer().min(1).max(maxPageSize).default(10),
 });
 
-const termsManager = require("../../src/modules/termsManager.js");
-
 const router = {
 	[GET]: [
 		workful.middlewares.yup.validateQueryParams(queryParamsSchema),
-		paginate(async (req, res, {yupQueryParams}) => {
+		paginate(async (req, res, {termsManager, yupQueryParams}) => {
 			const {
 				query,
 				pageNumber,

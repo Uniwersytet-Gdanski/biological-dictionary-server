@@ -1,7 +1,6 @@
 const workful = require("workful");
 const yup = require("yup");
 const paginate = require("../../src/modules/paginate.js");
-const termsManager = require("../../src/modules/termsManager.js");
 
 const {maxPageSize} = require("../../config.json").paging;
 const {
@@ -18,7 +17,7 @@ const queryParamsSchema = yup.object().shape({
 const router = {
 	[GET]: [
 		workful.middlewares.yup.validateQueryParams(queryParamsSchema),
-		paginate(async (req, res, {yupQueryParams}) => {
+		paginate(async (req, res, {termsManager, yupQueryParams}) => {
 			const {
 				prefix,
 				pageNumber,
