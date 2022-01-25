@@ -148,6 +148,54 @@ DELETE /api/terms/{id}
 - ##### 404 Not Found (term not found)
 - ##### 204 No Content
 
+### PUT /api/terms/{id}
+Updates term with given id.
+
+#### Endpoint: 
+```
+PUT /api/terms/{id}
+```
+
+#### Path parameters:
+-    `id`: term id (string, required)
+
+#### Body parameters:
+- `names`: polish translations of term (array od strings, required, min length: 1) 
+- `definition`: definition of term (string, required)
+- `englishTranslations`: english translations of term in singular and plural versions (required, min length: 1, array of objects containing:
+    - `singular`: singular translation of term (string, required)
+    - `plural`: plural translation of term (string, required)
+
+#### Responses:
+- ##### 400 Bad Request
+- ##### 409 Conflict (term already exists)
+- ##### 200 OK
+
+#### Response example:
+```json
+{
+    "names": [
+        "aberracja chromatyczna"
+    ],
+    "englishTranslations": [
+        {
+            "singular": "chromatic aberration",
+            "plural": "chromatic aberrations"
+        },
+        {
+            "singular": "chromatic distortion",
+            "plural": "chromatic distortions"
+        },
+        {
+            "singular": "spherochromaticism",
+            "plural": "spherochromaticisms"
+        }
+    ],
+    "definition": "An optical aberration occuring when a lens does not focus all colours in one place, caused by light dispersion.",
+    "id": "aberracja-chromatyczna"
+}
+```
+
 ### POST /api/terms
 Adds term to database.
 
@@ -165,9 +213,7 @@ POST /api/terms
 
 #### Responses:
 - ##### 400 Bad Request
-
 - ##### 409 Conflict (term already exists)
-    
 - ##### 200 OK
     
 #### Response example:
@@ -326,6 +372,38 @@ POST /api/login
 - ##### 400 Bad Request
 - ##### 401	Unauthorized (wrong login or password)
 - ##### 204 No Content
+
+### POST /api/logout
+Destroys session for user.
+
+#### Endpoint: 
+```
+POST /api/logout
+```
+
+#### Responses:
+- ##### 401	Unauthorized (no session)
+- ##### 204 No Content
+
+### GET /api/me
+Returns information about user.
+
+#### Endpoint: 
+```
+GET /api/me
+```
+
+#### Responses:
+- ##### 401	Unauthorized (no session)
+- ##### 200 OK
+
+#### Response example:
+```json
+{
+    "id": "4b93f793-b866-498b-b495-ca80b56ce39d",
+    "login": "mlomiak"
+}
+```
 
 ### GET /api/terms-first-letters
 Returns list of all possible first letters of terms.
