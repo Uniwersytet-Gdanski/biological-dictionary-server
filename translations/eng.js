@@ -11,6 +11,8 @@ module.exports = {
 	terms: {
 		termNotFound: (termId) => (`Term not found: ${termId}`),
 		termAlreadyExists: (termId) => (`Term already exists: ${termId}`),
+		syncStarted: "Terms sync started.",
+		syncFinished: "Terms sync finished.",
 	},
 	login: {
 		wrongCredentials: "Wrong credentials.",

@@ -5,10 +5,11 @@ class TermsManager {
 	#lookupTree = new LookupTree();
 	#terms = new Map();
 	syncInterval = null;
-	constructor(mongoose, Term, termsSyncInterval) {
+	constructor(mongoose, Term, termsSyncInterval, lang) {
 		this.mongoose = mongoose;
 		this.Term = Term;
 		this.syncInterval = setInterval(this.sync.bind(this), termsSyncInterval * 1000);
+		this.lang = lang;
 	}
 	#updateLookupTree = function() {
 		this.#lookupTree = new LookupTree();
@@ -39,10 +40,12 @@ class TermsManager {
 		this.#updateLookupTree();
 	};
 	sync = async function() {
+		console.log(this.lang("terms.syncStarted"));
 		await this.Term.find({}).then((fetchedTerms) => {
 			this.#terms = new Map();
 			this.#addMany(fetchedTerms);
 		});
+		console.log(this.lang("terms.syncFinished"));
 	}
 
 	getAll = function() {
