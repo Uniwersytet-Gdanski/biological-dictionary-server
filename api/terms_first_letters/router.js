@@ -4,12 +4,10 @@ const {
 	GET,
 } = workful.methodsSymbols;
 
-const entriesManager = require("../../src/modules/entriesManager.js");
-
 const router = {
-	[GET]: async (req, res) => {
-		const firstLetters = entriesManager.getAll().reduce((firstLetters, entry) => {
-			for (const name of entry.names) {
+	[GET]: async (req, res, {termsManager}) => {
+		const firstLetters = termsManager.getAll().reduce((firstLetters, term) => {
+			for (const name of term.names) {
 				firstLetters.add(name[0].toLowerCase());
 			}
 			return firstLetters;

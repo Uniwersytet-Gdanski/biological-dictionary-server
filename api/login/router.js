@@ -8,7 +8,6 @@ const lang = require("../../src/modules/lang.js");
 const {v4: uuidv4} = require("uuid");
 const yup = require("yup");
 
-
 const {
 	POST,
 } = workful.methodsSymbols;
@@ -24,11 +23,11 @@ const router = {
 	[POST]: [
 		workful.middlewares.jsonBody,
 		workful.middlewares.yup.validateJsonBody(bodySchema),
-		async (req, res, data) => {
+		async (req, res, {yupJsonBody}) => {
 			const {
 				login,
 				password,
-			} = await bodySchema.validate(data.jsonBody);
+			} = yupJsonBody;
 			const adminCredentials = await AdminCredentials.findOne({login});
 			if (!adminCredentials) {
 				return new Promise((resolve, reject) => {
@@ -54,7 +53,11 @@ const router = {
 				createdAt: now,
 				expiresAt: new Date(now.getTime() + config.session.tokenValidityDuration * 1000),
 			});
-			return res.setStatusCode(204).setCookie("sessionToken", session.token).setCookie("sessionId", session.id).end();
+			const cookieOptions = {secure: true, domain: config.domain, path: "/", sameSite: "strict"};
+			return res.setStatusCode(200).setCookie("sessionToken", session.token, {...cookieOptions, httpOnly: true}).setCookie("sessionId", session.id, {...cookieOptions, httpOnly: false}).endJson({
+				login: adminCredentials.login,
+				id: adminCredentials.id,
+			});
 		},
 	],
 };

@@ -21,7 +21,7 @@ This is a json file used to store credentials of any kind.
 		"password": "hard-password",
 		"replicaSet": "main"
 	},
-	"deployToken": "ciazowy-specjalista-123"
+	"deployToken": "token-used-to-deploy-website"
 }
 ```
 
@@ -30,28 +30,42 @@ This json file is used to store configuration of the server.
 ```json
 {
 	"port": 18292,
-	"baseUrl": "http://dict.gacko.pl",
-	"maxPageSize": 300,
-	"tokenValidityDuration": 533224,
-	"tokenLength": 64
+	"baseUrl": "http://localhost:18292",
+	"domain": "localhost",
+	"paging": {
+		"maxPageSize": 100
+	},
+	"session": {
+		"tokenValidityDuration": 143320,
+		"tokenLength": 64
+	},
+	"language": "eng",
+	"terms": {
+		"syncInterval": 600
+	},
+	"requestLimiter": {
+		"refreshInterval": 0.3
+	},
+	"websiteDirectory": "./website"
 }
+
 ```
 
 ## API
 
 BASE URL: https://dict.gacko.pl/api
 
-### GET /api/entries
-Returns fragment of all entries based on pagination parameters and informations about pages.
+### GET /api/terms
+Returns fragment of all terms based on pagination parameters and informations about pages.
 
 #### Endpoint:
 ```
-GET /api/entries
+GET /api/terms
 ```
 
 #### Query parameters:
 -    `pageNumber`: page number to be returned (integer, min: 1, default: 1)
--    `pageSize`: number of entries to be returned (integer, min: 1, max: 300, default: 10)
+-    `pageSize`: number of terms to be returned (integer, min: 1, max: 300, default: 10)
 
 #### Responses:
 - ##### 400 Bad Request
@@ -70,7 +84,7 @@ GET /api/entries
             "names": [
                 "aberracja chromatyczna"
             ],
-            "englishTerms": [
+            "englishTranslations": [
                 {
                     "singular": "chromatic aberration",
                     "plural": "chromatic aberrations"
@@ -88,24 +102,24 @@ GET /api/entries
             "id": "aberracja-chromatyczna"
         }
     ],
-    "nextPageUrl": "https://dict.gacko.pl/api/entries?pageSize=1&pageNumber=2",
+    "nextPageUrl": "https://dict.gacko.pl/api/terms?pageSize=1&pageNumber=2",
     "previousPageUrl": null
 }
 ```
 
-### GET /api/entries/{id}
-Returns entry with given id.
+### GET /api/terms/{id}
+Returns term with given id.
 
 #### Endpoint: 
 ```
-GET /api/entries/{id}
+GET /api/terms/{id}
 ```
 
 #### Path parameters:
--    `id`: entry id (string, required)
+-    `id`: term id (string, required)
 
 #### Responses:
-- ##### 404 Not Found (entry not found)
+- ##### 404 Not Found (term not found)
 - ##### 200 OK
 
 #### Response example:
@@ -114,7 +128,7 @@ GET /api/entries/{id}
     "names": [
         "aberracja chromatyczna"
     ],
-    "englishTerms": [
+    "englishTranslations": [
         {
             "singular": "chromatic aberration",
             "plural": "chromatic aberrations"
@@ -133,50 +147,51 @@ GET /api/entries/{id}
 }
 ```
 
-### DELETE /api/entries/{id}
-Deletes entry with given id.
+### DELETE /api/terms/{id}
+Deletes term with given id.
 
 #### Endpoint: 
 ```
-DELETE /api/entries/{id}
+DELETE /api/terms/{id}
 ```
 
 #### Path parameters:
--    `id`: entry id (string, required)
+-    `id`: term id (string, required)
 
 #### Responses:
-- ##### 404 Not Found (entry not found)
+- ##### 404 Not Found (term not found)
 - ##### 204 No Content
 
-### POST /api/entries
-Adds entry to database.
+### PUT /api/terms/{id}
+Updates term with given id.
 
-#### Endpoint:
+#### Endpoint: 
 ```
-POST /api/entries
+PUT /api/terms/{id}
 ```
+
+#### Path parameters:
+-    `id`: term id (string, required)
 
 #### Body parameters:
-- `names`: polish translations of entry (array od strings, required, min length: 1) 
-- `definition`: definition of entry (string, required)
-- `englishTerms`: english translations of entry in singular and plural versions (required, min length: 1, array of objects containing:
-    - `singular`: singular translation of entry (string, required)
-    - `plural`: plural translation of entry (string, required)
+- `names`: polish translations of term (array od strings, required, min length: 1) 
+- `definition`: definition of term (string, required)
+- `englishTranslations`: english translations of term in singular and plural versions (required, min length: 1, array of objects containing:
+    - `singular`: singular translation of term (string, required)
+    - `plural`: plural translation of term (string, required)
 
 #### Responses:
 - ##### 400 Bad Request
-
-- ##### 409 Conflict (entry already exists)
-    
+- ##### 409 Conflict (term already exists)
 - ##### 200 OK
-    
+
 #### Response example:
 ```json
 {
     "names": [
         "aberracja chromatyczna"
     ],
-    "englishTerms": [
+    "englishTranslations": [
         {
             "singular": "chromatic aberration",
             "plural": "chromatic aberrations"
@@ -195,19 +210,64 @@ POST /api/entries
 }
 ```
 
-### GET /api/entries-by-prefix
-Returns fragment of entries with given prefix based on pagination parameters and informations about pages.
+### POST /api/terms
+Adds term to database.
+
+#### Endpoint:
+```
+POST /api/terms
+```
+
+#### Body parameters:
+- `names`: polish translations of term (array od strings, required, min length: 1) 
+- `definition`: definition of term (string, required)
+- `englishTranslations`: english translations of term in singular and plural versions (required, min length: 1, array of objects containing:
+    - `singular`: singular translation of term (string, required)
+    - `plural`: plural translation of term (string, required)
+
+#### Responses:
+- ##### 400 Bad Request
+- ##### 409 Conflict (term already exists)
+- ##### 200 OK
+    
+#### Response example:
+```json
+{
+    "names": [
+        "aberracja chromatyczna"
+    ],
+    "englishTranslations": [
+        {
+            "singular": "chromatic aberration",
+            "plural": "chromatic aberrations"
+        },
+        {
+            "singular": "chromatic distortion",
+            "plural": "chromatic distortions"
+        },
+        {
+            "singular": "spherochromaticism",
+            "plural": "spherochromaticisms"
+        }
+    ],
+    "definition": "An optical aberration occuring when a lens does not focus all colours in one place, caused by light dispersion.",
+    "id": "aberracja-chromatyczna"
+}
+```
+
+### GET /api/terms-by-prefix
+Returns fragment of terms with given prefix based on pagination parameters and informations about pages.
 
 #### Endpoint: 
 ```
-GET /api/entries-by-prefix
+GET /api/terms-by-prefix
 ```
 
 #### Query parameters:
 -    `prefix`: prefix to be searched (string, required)
 -    `pageNumber`: page number to be returned (integer, min: 1, default: 1)
--    `pageSize`: number of entries to be returned (integer, min: 1, max: 300, default: 10)
--    `withoutFullEntries`: decides if full entries should be returned (boolean, nullable, default: false)
+-    `pageSize`: number of terms to be returned (integer, min: 1, max: 300, default: 10)
+-    `withFullTerms`: decides if full terms should be returned (boolean, nullable, default: false)
 
 #### Responses:
 - ##### 400 Bad Request
@@ -224,11 +284,11 @@ GET /api/entries-by-prefix
         {
         "id": "aberracja-chromatyczna",
         "name": "aberracja chromatyczna",
-        "entry": {
+        "term": {
             "names": [
                 "aberracja chromatyczna"
             ],
-            "englishTerms": [
+            "englishTranslations": [
             {
                 "singular": "chromatic aberration",
                 "plural": "chromatic aberrations"
@@ -247,24 +307,25 @@ GET /api/entries-by-prefix
         }
         }
     ],
-    "nextPageUrl": "https://dict.gacko.pl/api/entries-by-prefix?prefix=ab&pageSize=1&pageNumber=2",
+    "nextPageUrl": "https://dict.gacko.pl/api/terms-by-prefix?prefix=ab&pageSize=1&pageNumber=2",
     "previousPageUrl": null
 }
 ```
 
-### GET /api/search-entries
-Returns fragment of entries matching given query based on pagination parameters, informations about pages and score of each entry.
+### GET /api/search-terms
+Returns fragment of terms matching given query based on pagination parameters, informations about pages and score of each term.
 
 #### Endpoint: 
 ```
-GET /api/search-entries
+GET /api/search-terms
 ```
 
 #### Query parameters:
 -    `query`: query to be searched (string, required)
 -    `pageNumber`: page number to be returned (integer, min: 1, default: 1)
--    `pageSize`: number of entries to be returned (integer, min: 1, max: 300, default: 10)
--    `withoutFullEntries`: decides if full entries should be returned (boolean, nullable, default: false)
+-    `pageSize`: number of terms to be returned (integer, min: 1, max: 300, default: 10)
+-    `withFullTerms`: decides if full terms should be returned (boolean, nullable, default: false)
+-    `withoutDuplicates`: decides if terms with duplicated ids should be returned (boolean, nullable, default: false)
 
 #### Resposes:
 - ##### 400 Bad Request
@@ -282,11 +343,11 @@ GET /api/search-entries
         "id": "aberracja-chromatyczna",
         "name": "aberracja chromatyczna",
         "score": 0.8,
-        "entry": {
+        "term": {
             "names": [
             "aberracja chromatyczna"
             ],
-            "englishTerms": [
+            "englishTranslations": [
             {
                 "singular": "chromatic aberration",
                 "plural": "chromatic aberrations"
@@ -305,7 +366,7 @@ GET /api/search-entries
         }
         }
     ],
-    "nextPageUrl": "https://dict.gacko.pl/api/search-entries?query=abc&pageSize=1&pageNumber=2",
+    "nextPageUrl": "https://dict.gacko.pl/api/search-terms?query=abc&pageSize=1&pageNumber=2",
     "previousPageUrl": null
 }
 ```
@@ -325,14 +386,54 @@ POST /api/login
 #### Responses:
 - ##### 400 Bad Request
 - ##### 401	Unauthorized (wrong login or password)
+- ##### 200 OK
+
+#### Response example:
+```json
+{
+    "id": "4b93f793-b866-498b-b495-ca80b56ce39d",
+    "login": "mlomiak"
+}
+```
+
+### POST /api/logout
+Destroys session for user.
+
+#### Endpoint: 
+```
+POST /api/logout
+```
+
+#### Responses:
+- ##### 401	Unauthorized (no session)
 - ##### 204 No Content
 
-### GET /api/entries-first-letters
-Returns list of all possible first letters of entries.
+### GET /api/me
+Returns information about user.
+
+#### Endpoint: 
+```
+GET /api/me
+```
+
+#### Responses:
+- ##### 401	Unauthorized (no session)
+- ##### 200 OK
+
+#### Response example:
+```json
+{
+    "id": "4b93f793-b866-498b-b495-ca80b56ce39d",
+    "login": "mlomiak"
+}
+```
+
+### GET /api/terms-first-letters
+Returns list of all possible first letters of terms.
 
 #### Endpoint:
 ```
-GET /api/entries-first-letters
+GET /api/terms-first-letters
 ```
 
 #### Responses:
