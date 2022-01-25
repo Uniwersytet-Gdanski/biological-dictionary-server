@@ -18,4 +18,7 @@ module.exports = {
 	requestLimiter: {
 		tooManyRequests: "Too many requests.",
 	},
+	deploy: {
+		unauthorized: "Unauthorized.",
+	},
 };
