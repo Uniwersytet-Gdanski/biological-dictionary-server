@@ -73,7 +73,6 @@ class TermsManager {
 			this.#terms.delete(term.id);
 			this.#terms.set(updatedTerm.id, updatedTerm);
 			this.#updateLookupTree();
-			console.log("updated term", updatedTerm);
 			updatedTermAcc = updatedTerm;
 			return;
 		}).then(() => (updatedTermAcc));
