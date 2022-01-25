@@ -7,6 +7,7 @@ const router = {
 	"logout": require("./logout/router.js"),
 	"deploy": require("./deploy/router.js"),
 	"clear-deploy": require("./clear_deploy/router.js"),
+	"me": require("./me/router.js"),
 };
 
 module.exports = router;
