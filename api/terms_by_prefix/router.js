@@ -8,7 +8,7 @@ const {
 } = workful.methodsSymbols;
 
 const queryParamsSchema = yup.object().shape({
-	prefix: yup.string().nullable().default("").transform((value) => (value.toLowerCase())),
+	prefix: yup.string().nullable().test("is-not-null", "prefix is required", (value) => (value != null)).lowercase(),
 	pageNumber: yup.number().integer().min(1).default(1),
 	pageSize: yup.number().integer().min(1).max(maxPageSize).default(10),
 	withFullTerms: yup.boolean().nullable().default(false).transform((value) => (value === null ? true : value)),
@@ -24,6 +24,7 @@ const router = {
 				pageSize,
 				withFullTerms: isWithFullTerms,
 			} = yupQueryParams;
+			console.log(`terms_by_prefix/router.js: GET: ${prefix}`);
 			const terms = termsManager.getAll().reduce((terms, term) => {
 				for (const name of term.names) {
 					if (!name.toLowerCase().startsWith(prefix)) continue;
