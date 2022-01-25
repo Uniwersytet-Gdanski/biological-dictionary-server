@@ -386,7 +386,15 @@ POST /api/login
 #### Responses:
 - ##### 400 Bad Request
 - ##### 401	Unauthorized (wrong login or password)
-- ##### 204 No Content
+- ##### 200 OK
+
+#### Response example:
+```json
+{
+    "id": "4b93f793-b866-498b-b495-ca80b56ce39d",
+    "login": "mlomiak"
+}
+```
 
 ### POST /api/logout
 Destroys session for user.

@@ -54,7 +54,10 @@ const router = {
 				expiresAt: new Date(now.getTime() + config.session.tokenValidityDuration * 1000),
 			});
 			const cookieOptions = {secure: true, domain: config.domain, path: "/", sameSite: "strict"};
-			return res.setStatusCode(204).setCookie("sessionToken", session.token, {...cookieOptions, httpOnly: true}).setCookie("sessionId", session.id, {...cookieOptions, httpOnly: false}).end();
+			return res.setStatusCode(200).setCookie("sessionToken", session.token, {...cookieOptions, httpOnly: true}).setCookie("sessionId", session.id, {...cookieOptions, httpOnly: false}).endJson({
+				login: adminCredentials.login,
+				id: adminCredentials.id,
+			});
 		},
 	],
 };
