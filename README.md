@@ -21,7 +21,7 @@ This is a json file used to store credentials of any kind.
 		"password": "hard-password",
 		"replicaSet": "main"
 	},
-	"deployToken": "ciazowy-specjalista-123"
+	"deployToken": "token-used-to-deploy-website"
 }
 ```
 
@@ -30,11 +30,25 @@ This json file is used to store configuration of the server.
 ```json
 {
 	"port": 18292,
-	"baseUrl": "http://dict.gacko.pl",
-	"maxPageSize": 300,
-	"tokenValidityDuration": 533224,
-	"tokenLength": 64
+	"baseUrl": "http://localhost:18292",
+	"domain": "localhost",
+	"paging": {
+		"maxPageSize": 100
+	},
+	"session": {
+		"tokenValidityDuration": 143320,
+		"tokenLength": 64
+	},
+	"language": "eng",
+	"terms": {
+		"syncInterval": 600
+	},
+	"requestLimiter": {
+		"refreshInterval": 0.3
+	},
+	"websiteDirectory": "./website"
 }
+
 ```
 
 ## API
