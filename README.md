@@ -310,7 +310,8 @@ GET /api/search-terms
 -    `query`: query to be searched (string, required)
 -    `pageNumber`: page number to be returned (integer, min: 1, default: 1)
 -    `pageSize`: number of terms to be returned (integer, min: 1, max: 300, default: 10)
--    `withoutFullTerms`: decides if full terms should be returned (boolean, nullable, default: false)
+-    `withFullTerms`: decides if full terms should be returned (boolean, nullable, default: false)
+-    `withoutDuplicates`: decides if terms with duplicated ids should be returned (boolean, nullable, default: false)
 
 #### Resposes:
 - ##### 400 Bad Request
