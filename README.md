@@ -182,6 +182,7 @@ PUT /api/terms/{id}
 
 #### Responses:
 - ##### 400 Bad Request
+- ##### 404 Not Found (term not found)
 - ##### 409 Conflict (term already exists)
 - ##### 200 OK
 
