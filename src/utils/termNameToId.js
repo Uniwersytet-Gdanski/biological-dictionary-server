@@ -1,5 +1,3 @@
-const latinize = require("latinize");
-
-const termNameToId = (termName) => (latinize(termName.toLowerCase()).replace(/[^\w()]+/g, " ").trim().replace(/\s+/g, "_"));
+const termNameToId = (termName) => (termName.toLowerCase().replace(/[^[\p{L|Nd}]()]+/g, " ").trim().replace(/\s+/g, "_"));
 
 module.exports = termNameToId;
