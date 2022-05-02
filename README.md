@@ -53,7 +53,7 @@ This json file is used to store configuration of the server.
 
 ## API
 
-BASE URL: https://dict.gacko.pl/api
+BASE URL: https://biodictionary.inf.ug.edu.pl/api
 
 ### GET /api/terms
 Returns fragment of all terms based on pagination parameters and informations about pages.
