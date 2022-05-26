@@ -8,4 +8,4 @@ const adminCredentialsSchema = new Schema({
 	hash: String,
 });
 
-module.exports = model("AdminCredentials", adminCredentialsSchema, "adminCredentials");
+module.exports = model("AdminCredentials", adminCredentialsSchema, "adminsCredentials");
